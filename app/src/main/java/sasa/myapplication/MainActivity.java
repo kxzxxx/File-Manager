@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
             StudentInfo student = new StudentInfo();
             FragmentManager manager = getFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
-            transaction.setTransition(4099);
+            transaction.setTransition(4099); //ÉèÖÃ×ª»»¶¯»­
 
             CardViewFragment Card = new  CardViewFragment();
 
