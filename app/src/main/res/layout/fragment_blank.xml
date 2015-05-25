@@ -1,0 +1,18 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" tools:context="sasa.myapplication.BlankFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
+        android:text="@string/hello_blank_fragment" />
+    <TextView
+        android:id="@+id/attention_seeker"
+        android:layout_gravity="center"
+        android:text="Shake"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:textSize="22dp"
+        android:background="#00ff00"/>
+
+</FrameLayout>

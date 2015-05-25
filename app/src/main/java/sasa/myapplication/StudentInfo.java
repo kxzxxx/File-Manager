@@ -13,7 +13,7 @@ import android.widget.TextView;
  */
 public class StudentInfo extends Fragment
 {
-    // Fragment对应的标签，当Fragment依附于Activity时得到
+    //
     private String tag;
 
     @Override

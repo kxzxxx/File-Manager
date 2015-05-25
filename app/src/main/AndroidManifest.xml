@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="sasa.myapplication" >
 
+    <!-- To access Google+ APIs: -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -29,11 +32,10 @@
             android:name=".TestIntentBasicView"
             android:label="@string/title_activity_test_intent_basic_view" >
             <intent-filter>
-            <action android:name="sasa.myapplication.intent.action.TestIntentBasicView"/>
-            <category android:name="android.intent.category.DEFAULT"
-            />
-            </intent-filter>
+                <action android:name="sasa.myapplication.intent.action.TestIntentBasicView" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
     </application>
 

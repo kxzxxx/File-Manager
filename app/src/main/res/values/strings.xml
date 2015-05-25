@@ -15,8 +15,8 @@
     <string name="planets">planets</string>
     <string-array name="student">
         <item>CardView</item>
-        <item>2</item>
-        <item>3</item>
+        <item>WebView</item>
+        <item>Socket</item>
         <item>4</item>
 
     </string-array>
@@ -31,5 +31,8 @@
     <string name="cardview_radius_seekbar_text">Radius</string>
     <string name="cardview_elevation_seekbar_text">Elevation</string>
     <string name="title_activity_test_intent_basic_view">TestIntentBasicView</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">GTAV</string>
 
 </resources>

@@ -20,6 +20,7 @@ package sasa.myapplication;
 */
 
 import android.app.Fragment;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -60,12 +61,6 @@ public class CardViewFragment extends Fragment {
      *
      * @return A new instance of fragment NotificationFragment.
      */
-    public static CardViewFragment newInstance() {
-        CardViewFragment fragment = new CardViewFragment();
-        fragment.setRetainInstance(true);
-
-        return fragment;
-    }
 
     public CardViewFragment() {
         // Required empty public constructor
@@ -88,11 +83,14 @@ public class CardViewFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mCardView = (CardView) view.findViewById(R.id.cardview);
         description=(TextView)view.findViewById(R.id.editText);
-      //  description.setText("0");
+
+        description.setText(String.valueOf((int)mCardView.getRadius()));
 
         description1 = (TextView) view.findViewById(R.id.editText1);
-    //    description1.setText("0");
+
+
         mRadiusSeekBar = (SeekBar) view.findViewById(R.id.cardview_radius_seekbar);
+        mRadiusSeekBar.setProgress((int) Math.floor(mCardView.getRadius()));
         mRadiusSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -100,6 +98,7 @@ public class CardViewFragment extends Fragment {
                 mCardView.setRadius(progress);
                 description.setText(String.valueOf(progress));
             }
+
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
                 //Do nothing
@@ -112,6 +111,10 @@ public class CardViewFragment extends Fragment {
         });
 
         mElevationSeekBar = (SeekBar) view.findViewById(R.id.cardview_elevation_seekbar);
+ if(Build.VERSION.SDK_INT>=19){
+     description1.setText(String.valueOf((int)mCardView.getElevation()));
+
+        mElevationSeekBar.setProgress((int)Math.floor(mCardView.getElevation()));
         mElevationSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -129,6 +132,7 @@ public class CardViewFragment extends Fragment {
                 //Do nothing
             }
         });
+ }
     }
 }
 
