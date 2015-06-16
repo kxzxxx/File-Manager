@@ -17,6 +17,7 @@ import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 
@@ -41,6 +42,7 @@ public class SettingsActivity extends PreferenceActivity {
      * as activity_self_edit master/detail two-pane view on tablets. When true, activity_self_edit single pane is
      * shown on tablets.
      */
+    private String TAG= SettingsActivity.class.getSimpleName();
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
     private Toolbar ab;
 
@@ -105,6 +107,7 @@ public class SettingsActivity extends PreferenceActivity {
 
         // Add 'general' preferences.
         addPreferencesFromResource(R.xml.pref_general);
+        Log.d(TAG,"Add prefer");
 
         // Add 'notifications' preferences, and activity_self_edit corresponding header.
         PreferenceCategory fakeHeader = new PreferenceCategory(this);
@@ -152,8 +155,7 @@ public class SettingsActivity extends PreferenceActivity {
      * "simplified" settings UI should be shown.
      */
     private static boolean isSimplePreferences(Context context) {
-        return ALWAYS_SIMPLE_PREFS
-                || Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB
                 || !isXLargeTablet(context);
     }
 

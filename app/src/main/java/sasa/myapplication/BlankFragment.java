@@ -4,13 +4,15 @@ package sasa.myapplication;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.os.Bundle;
-import android.os.Handler;
+
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import static sasa.myapplication.ShakeAnm.tada;
+
+import android.app.Notification;
 
 
 
@@ -27,24 +29,9 @@ public class BlankFragment extends Fragment {
 
 //    private OnFragmentInteractionListener mListener;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment BlankFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static BlankFragment newInstance(String param1, String param2) {
 
-        BlankFragment fragment = new BlankFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    // TODO: Rename and change types and number of parameters
+
 
     public BlankFragment() {
         // Required empty public constructor
@@ -70,14 +57,9 @@ public class BlankFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         clickMe = (TextView) view.findViewById(R.id.attention_seeker);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                ObjectAnimator animator = tada(clickMe);
-                animator.setRepeatCount(ValueAnimator.INFINITE);
-                animator.start();
-            }
-        },2000);
+
+
+
     }
 
 }
