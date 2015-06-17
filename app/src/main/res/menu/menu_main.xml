@@ -4,5 +4,5 @@
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
     <item android:id="@+id/share" android:title="Share" app:showAsAction="never"/>
-    <item android:id="@+id/shake" android:title="Shake" android:icon="@drawable/ic_action_gamepad" app:showAsAction="always"/>
+
 </menu>

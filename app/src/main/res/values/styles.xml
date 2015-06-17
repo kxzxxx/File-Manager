@@ -1,13 +1,30 @@
 <resources>
 
+
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="AppTheme.Base">
     </style>
 
-    <style name="Theme.Base" parent="android:Theme.Light" />
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/myPrimaryColor</item>
+        <item name="colorPrimaryDark">@color/myPrimaryDarkColor</item>
+        <item name="colorAccent">@color/myAccentColor</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+    </style>
 
-    <style name="Theme.Sample" parent="Theme.Base" />
+    <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">true</item>
+        <item name="color">@android:color/white</item>
+    </style>
+
+    <style name="ToolBarStyle" parent="">
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+    </style>
+
+    <style name="ToolBar" parent="ToolBarStyle">
+    </style>
 
 
     <style name="Widget" />
@@ -17,12 +34,8 @@
         <item name="android:lineSpacingMultiplier">1.1</item>
     </style>
 
-    <style name="Widget.SampleMessageTile">
-        <item name="android:background">@drawable/tile</item>
-        <item name="android:shadowColor">#7F000000</item>
-        <item name="android:shadowDy">-3.5</item>
-        <item name="android:shadowRadius">2</item>
-    </style>
-
 
 </resources>
+
+
+

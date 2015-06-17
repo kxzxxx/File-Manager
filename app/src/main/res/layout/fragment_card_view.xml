@@ -36,7 +36,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:elevation="100dp"
-            card_view:cardBackgroundColor="@color/cardview_initial_background"
+            card_view:cardBackgroundColor="@color/myAccentColor"
             card_view:cardCornerRadius="8dp"
             android:layout_marginLeft="@dimen/margin_large"
             android:layout_marginRight="@dimen/margin_large"
