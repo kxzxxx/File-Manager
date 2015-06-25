@@ -1,9 +1,7 @@
 package sasa.myapplication;
 
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -18,12 +16,11 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     private List<NavigationItem> mData;
     private NavigationDrawerCallbacks mNavigationDrawerCallbacks;
     private int mSelectedPosition;
-    private int mTouchedPosition = -1;
+    // private int mTouchedPosition = -1;
 
     public NavigationDrawerAdapter(List<NavigationItem> data) {
         mData = data;
     }
-
 
     public void setNavigationDrawerCallbacks(NavigationDrawerCallbacks navigationDrawerCallbacks) {
         mNavigationDrawerCallbacks = navigationDrawerCallbacks;
@@ -32,37 +29,17 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     @Override
     public NavigationDrawerAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.drawer_row, viewGroup, false);
-        final ViewHolder viewholder = new ViewHolder(v);
-        viewholder.itemView.setOnTouchListener(new View.OnTouchListener() {
-                                                   @Override
-                                                   public boolean onTouch(View v, MotionEvent event) {
+        final ViewHolder vH = new ViewHolder(v);
+        vH.itemView.setOnClickListener(new View.OnClickListener() {
+                                           @Override
+                                           public void onClick(View v) {
+                                               if (mNavigationDrawerCallbacks != null)
+                                                   mNavigationDrawerCallbacks.onNavigationDrawerItemSelected(vH.getAdapterPosition());
+                                           }
+                                       }
+        );
 
-                                                       switch (event.getAction()) {
-                                                           case MotionEvent.ACTION_DOWN:
-                                                               touchPosition(viewholder.getAdapterPosition());
-                                                               return false;
-                                                           case MotionEvent.ACTION_CANCEL:
-                                                               touchPosition(-1);
-                                                               return false;
-                                                           case MotionEvent.ACTION_MOVE:
-                                                               return false;
-                                                           case MotionEvent.ACTION_UP:
-                                                               touchPosition(-1);
-                                                               return false;
-                                                       }
-                                                       return true;
-                                                   }
-                                               }
-        );
-        viewholder.itemView.setOnClickListener(new View.OnClickListener() {
-                                                   @Override
-                                                   public void onClick(View v) {
-                                                       if (mNavigationDrawerCallbacks != null)
-                                                           mNavigationDrawerCallbacks.onNavigationDrawerItemSelected(viewholder.getAdapterPosition());
-                                                   }
-                                               }
-        );
-        return viewholder;
+        return vH;
     }
 
     @Override
@@ -70,21 +47,13 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
         viewHolder.textView.setText(mData.get(i).getText());
         viewHolder.textView.setCompoundDrawablesWithIntrinsicBounds(mData.get(i).getDrawable(), null, null, null);
 
-        //TODO: selected menu position, change layout accordingly
-        if (mSelectedPosition == i || mTouchedPosition == i) {
+
+
+ /*       if (mSelectedPosition == i || mTouchedPosition == i) {
             viewHolder.itemView.setBackgroundColor(viewHolder.itemView.getContext().getResources().getColor(R.color.selected_gray));
         } else {
             viewHolder.itemView.setBackgroundColor(Color.TRANSPARENT);
-        }
-    }
-
-    private void touchPosition(int position) {
-        int lastPosition = mTouchedPosition;
-        mTouchedPosition = position;
-        if (lastPosition >= 0)
-            notifyItemChanged(lastPosition);
-        if (position >= 0)
-            notifyItemChanged(position);
+        }*/
     }
 
     public void selectPosition(int position) {
@@ -100,11 +69,13 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView textView;
+        private final TextView textView;
 
-        public ViewHolder(View itemView) {
-            super(itemView);
-            textView = (TextView) itemView.findViewById(R.id.item_name);
+
+        public ViewHolder(View v) {
+            super(v);
+            textView = (TextView) v.findViewById(R.id.item_name);
+
         }
     }
 }

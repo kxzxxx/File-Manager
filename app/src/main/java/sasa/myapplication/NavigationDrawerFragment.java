@@ -8,6 +8,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
@@ -121,6 +122,8 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         });
 
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
+
+
     }
 
 
@@ -139,9 +142,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         String[] item=getResources().getStringArray(R.array.student);
 
         for (String i:item){
-
             items.add(new NavigationItem(i));
-
         }
 
 
@@ -182,13 +183,13 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
     }
 
-    @Override
+    //Called by the system when the device configuration changes while your component is running.
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mActionBarDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-    @Override
+    //Called to ask the fragment to save its current dynamic state, so it can later be reconstructed in a new instance of its process is restarted.
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);

@@ -1,7 +1,6 @@
 package sasa.myapplication;
 
 
-import android.animation.ObjectAnimator;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -12,18 +11,13 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.SpinnerAdapter;
-
-import static sasa.myapplication.ShakeAnm.tada;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationDrawerCallbacks {
     private String TAG = MainActivity.class.getSimpleName();
 
     private Toolbar ab;
+
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
 
@@ -32,9 +26,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         ab = (Toolbar) findViewById(R.id.toolbar_actionbar);
-
         setSupportActionBar(ab);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -57,14 +49,10 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
 
             //noinspection SimplifiableIfStatement
             if (id == R.id.action_settings) {
-
                 Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
                 MainActivity.this.startActivity(intent);
-
                 return true;
             }
-
-
 
             return true;
         }
@@ -78,10 +66,9 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         Log.d(TAG, String.format("Select item : %d", itemPosition + 1));
         StudentInfo student = new StudentInfo();
         CardViewFragment Card = new CardViewFragment();
-        BlankFragment Socket = new BlankFragment();
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.setTransition(transaction.TRANSIT_FRAGMENT_FADE);
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 
 
         switch (itemPosition) {
@@ -90,10 +77,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
 
                 transaction.replace(R.id.container, Card);
                 break;
-            case 2:
 
-                transaction.replace(R.id.container, Socket);
-                break;
 
             default:
 
