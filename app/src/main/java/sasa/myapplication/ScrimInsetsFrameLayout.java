@@ -9,8 +9,10 @@ import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
+
 /**
- * Created by vV on 2015/6/16.
+ * A layout that draws something in the insets passed to {@link #fitSystemWindows(Rect)}, i.e. the area above UI chrome
+ * (status and navigation bars, overlay action bars).
  */
 public class ScrimInsetsFrameLayout extends FrameLayout {
     private Drawable mInsetForeground;
@@ -117,7 +119,7 @@ public class ScrimInsetsFrameLayout extends FrameLayout {
         mOnInsetsCallback = onInsetsCallback;
     }
 
-    public interface OnInsetsCallback {
-        void onInsetsChanged(Rect insets);
+    public static interface OnInsetsCallback {
+        public void onInsetsChanged(Rect insets);
     }
 }

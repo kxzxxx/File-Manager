@@ -1,4 +1,4 @@
-package sasa.myapplication;
+package sasa.myapplication.Activity;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -23,6 +23,8 @@ import android.support.v4.app.NavUtils;
 
 
 import java.util.List;
+
+import sasa.myapplication.R;
 
 /**
  * A {@link PreferenceActivity} that presents activity_self_edit set of application settings. On

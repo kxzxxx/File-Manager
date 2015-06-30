@@ -3,10 +3,21 @@
 
     <style name="AppTheme" parent="AppTheme.Base">
         <item name="android:navigationBarColor">@color/myPrimaryDarkColor</item>
+        <item name="android:windowContentTransitions">true</item>
+
+
+
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+
     </style>
 
     <style name="ToolBar" parent="ToolBarStyle">
         <item name="android:elevation">@dimen/toolbar_elevation</item>
+    </style>
+
+    <style name="Elevation" >
+        <item name="android:elevation">100dp</item>
     </style>
 
 </resources>

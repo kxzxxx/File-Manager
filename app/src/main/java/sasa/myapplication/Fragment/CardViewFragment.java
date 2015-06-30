@@ -1,4 +1,4 @@
-package sasa.myapplication;
+package sasa.myapplication.Fragment;
 
 /**
  * Created by vV on 2015/5/1.
@@ -29,6 +29,8 @@ import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.support.v7.widget.CardView;
+
+import sasa.myapplication.R;
 
 /**
  * Fragment that demonstrates how to use CardView.

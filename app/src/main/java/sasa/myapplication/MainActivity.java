@@ -12,6 +12,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import sasa.myapplication.Activity.SettingsActivity;
+import sasa.myapplication.Custom.CustomDrawer;
+import sasa.myapplication.Fragment.CardViewFragment;
+import sasa.myapplication.Fragment.NavigationDrawerFragment;
+
 
 public class MainActivity extends AppCompatActivity implements NavigationDrawerCallbacks {
     private String TAG = MainActivity.class.getSimpleName();
@@ -26,14 +31,17 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        //setup toolbar
         ab = (Toolbar) findViewById(R.id.toolbar_actionbar);
         setSupportActionBar(ab);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        ab.setOnMenuItemClickListener(onMenuItemClick);
 
+
+        //setup drawer
 
         mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.fragment_drawer);
-        mNavigationDrawerFragment.setup(R.id.fragment_drawer, (DrawerLayout) findViewById(R.id.drawer), ab);
-        ab.setOnMenuItemClickListener(onMenuItemClick);
+        mNavigationDrawerFragment.setup(R.id.fragment_drawer, (CustomDrawer) findViewById(R.id.drawer), ab);
 
 
     }
@@ -46,7 +54,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     private Toolbar.OnMenuItemClickListener onMenuItemClick = new Toolbar.OnMenuItemClickListener() {
         public boolean onMenuItemClick(MenuItem item) {
             int id = item.getItemId();
-
             //noinspection SimplifiableIfStatement
             if (id == R.id.action_settings) {
                 Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
@@ -81,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
 
             default:
 
-                transaction.replace(R.id.container, student, listNames[itemPosition]);//第三个参数设置TAG
+                transaction.replace(R.id.container, student, listNames[itemPosition]);//3rd param set TAG
 
         }
 
