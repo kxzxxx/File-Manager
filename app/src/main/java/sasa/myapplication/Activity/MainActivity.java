@@ -1,21 +1,22 @@
-package sasa.myapplication;
+package sasa.myapplication.Activity;
 
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import sasa.myapplication.Activity.SettingsActivity;
 import sasa.myapplication.Custom.CustomDrawer;
 import sasa.myapplication.Fragment.CardViewFragment;
 import sasa.myapplication.Fragment.NavigationDrawerFragment;
+import sasa.myapplication.NavigationDrawerCallbacks;
+import sasa.myapplication.R;
+import sasa.myapplication.StudentInfo;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationDrawerCallbacks {
@@ -101,6 +102,5 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         else
             super.onBackPressed();
     }
-
 
 }
