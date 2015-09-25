@@ -22,4 +22,6 @@
 
     <dimen name="toolbar_elevation">10dp</dimen>
 
+    <dimen name="list_horizontal_margin">0dp</dimen>
+
 </resources>

@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:id="@+id/second"
-android:layout_width="fill_parent"
-android:background="?android:attr/selectableItemBackground"
-android:layout_height="48dp">
-<TextView
-    android:id="@+id/item_name"
-    android:layout_width="wrap_content"
-    android:layout_height="fill_parent"
-    android:layout_marginStart="72dp"
-    android:textSize="14sp"
-    android:fontFamily="sans-serif-medium"
-    android:singleLine="true"
-    android:ellipsize="end"
-    android:clickable="false"
-    android:gravity="center_vertical"
-    android:text="546548" />
+    android:id="@+id/second"
+    android:layout_width="fill_parent"
+    android:background="?android:attr/selectableItemBackground"
+    android:layout_height="48dp">
+
+    <TextView
+        android:id="@+id/item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_marginStart="72dp"
+        android:textSize="14sp"
+        android:fontFamily="sans-serif-medium"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:clickable="false"
+        android:gravity="center_vertical"
+        android:text="546548" />
 </RelativeLayout>

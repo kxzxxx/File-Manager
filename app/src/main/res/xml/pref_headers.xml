@@ -2,13 +2,16 @@
 
     <!-- These settings headers are only used on tablets. -->
 
-    <header android:fragment="sasa.myfilemanager.Activity.SettingsActivity$GeneralPreferenceFragment"
+    <header
+        android:fragment="SettingsActivity$GeneralPreferenceFragment"
         android:title="@string/pref_header_general" />
 
-    <header android:fragment="sasa.myfilemanager.Activity.SettingsActivity$NotificationPreferenceFragment"
+    <header
+        android:fragment="SettingsActivity$NotificationPreferenceFragment"
         android:title="@string/pref_header_notifications" />
 
-    <header android:fragment="sasa.myfilemanager.Activity.SettingsActivity$DataSyncPreferenceFragment"
+    <header
+        android:fragment="SettingsActivity$DataSyncPreferenceFragment"
         android:title="@string/pref_header_data_sync" />
 
 </preference-headers>
