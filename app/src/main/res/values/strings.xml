@@ -29,6 +29,7 @@
 
     <string name="drawer_open">Menu opened</string>
     <string name="drawer_close">Menu closed</string>
+    <string name="home">home</string>
 
     <string name="use_monospace">Use monospace</string>
     <string name="recent_files">Recent files</string>
