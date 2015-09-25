@@ -3,7 +3,6 @@ package me.myfilemanager.Activity;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -77,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         listView.setOnItemClickListener(this);
         listView.setTextFilterEnabled(true);
 
-        //
+        //获取主储存路径
 
         String homePath =Environment.getExternalStorageDirectory().getAbsolutePath();
         File file=new File(homePath);
@@ -150,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             super.onBackPressed();
     }
     private class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetailedList.FileDetail>> {
-
+//异步加载文件夹目录
         String exceptionMessage;
 
         @Override
@@ -166,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         protected LinkedList<AdapterDetailedList.FileDetail> doInBackground(final String... params) {
             try {
 
-                final String path = params[0];
+                final String path = params[0];  //params[0]为传给UpdateList的第一个参数
                 if (TextUtils.isEmpty(path)) {
                     return null;
                 }
