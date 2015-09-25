@@ -1,6 +1,7 @@
 package me.myfilemanager.Utils;
 
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v4.view.MenuItemCompat;
 import android.text.TextUtils;
 import android.widget.Toast;
@@ -17,6 +18,7 @@ import java.util.LinkedList;
 
 import me.myfilemanager.Adapter.AdapterDetailedList;
 import me.myfilemanager.Activity.MainActivity;
+import me.myfilemanager.R;
 
 /**
  * Created by xz on 2015/9/22.
