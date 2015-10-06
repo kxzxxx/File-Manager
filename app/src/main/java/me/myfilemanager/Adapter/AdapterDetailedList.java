@@ -1,42 +1,46 @@
 package me.myfilemanager.Adapter;
 
 import android.content.Context;
+import android.os.Environment;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.apache.commons.io.FilenameUtils;
 
+import java.io.File;
 import java.util.LinkedList;
 
+import me.myfilemanager.Activity.MainActivity;
 import me.myfilemanager.R;
+import me.myfilemanager.Utils.UpdateList;
 
 /**
  * Created by xz on 2015/9/22.
  */
-public class AdapterDetailedList extends
-        ArrayAdapter<AdapterDetailedList.FileDetail> {
-
+public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedList.ViewHolder> {
     //layout inflater
-    final LayoutInflater inflater;
+    //  final LayoutInflater inflater;
     final LinkedList<FileDetail> orig;
-    CustomFilter customFilter;
 
+    Context context;
     //list of file details
     LinkedList<FileDetail> fileDetails;
+    MainActivity mainActivity;
 
-    public AdapterDetailedList(final Context context,
+    public AdapterDetailedList(final MainActivity mainActivity,
                                final LinkedList<FileDetail> fileDetails,
                                final boolean isRoot) {
-        super(context, R.layout.item_file_list, fileDetails);
         this.fileDetails = fileDetails;
+        this.mainActivity=mainActivity;
         this.orig = fileDetails;
-        this.inflater = LayoutInflater.from(context);
+        this.context = mainActivity;
+        //    this.inflater = LayoutInflater.from(context);
         if (!isRoot) {
             this.fileDetails.addFirst(new FileDetail("..", context.getString(R.string.folder), ""));
         } else {
@@ -44,34 +48,24 @@ public class AdapterDetailedList extends
         }
     }
 
-    public View getView(final int position, View convertView, final ViewGroup parent) {
-        if (convertView == null) {
-            convertView = this.inflater.inflate(R.layout.item_file_list, null);
-            final ViewHolder hold = new ViewHolder();
-            hold.nameLabel = (TextView) convertView.findViewById(android.R.id.text1);
-            hold.detailLabel = (TextView) convertView.findViewById(android.R.id.text2);
-            hold.icon = (ImageView) convertView.findViewById(android.R.id.icon);
-            convertView.setTag(hold);
-            final FileDetail fileDetail = fileDetails.get(position);
-            final String fileName = fileDetail.getName();
-            setIcon(hold, fileDetail);
-            hold.nameLabel.setText(fileName);
-            hold.detailLabel.setText(fileDetail.getSize() + "\t\t" + fileDetail.getDateModified());
 
-        } else {
-            final ViewHolder hold = (ViewHolder) convertView.getTag();
-            final FileDetail fileDetail = fileDetails.get(position);
-            final String fileName = fileDetail.getName();
-            setIcon(hold, fileDetail);
-            hold.nameLabel.setText(fileName);
-            hold.detailLabel.setText(fileDetail.getSize() + "\t\t" + fileDetail.getDateModified());
+    public void onBindViewHolder(AdapterDetailedList.ViewHolder viewHolder, final int i) {
 
-        }
-        return convertView;
+        setIcon(viewHolder, fileDetails.get(i));
+        viewHolder.nameLabel.setText(fileDetails.get(i).getName());
+        //  viewHolder.sizeLabel.setText(fileDetail.getSize() + "\t\t" + fileDetail.getDateModified());
+
     }
 
-    public int getCount() {
-        return fileDetails.size();
+
+    public int getItemCount() {
+        return fileDetails != null ? fileDetails.size() : 0;
+    }
+
+
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        View v = LayoutInflater.from(context).inflate(R.layout.item_file_list, viewGroup, false);
+        return new ViewHolder(v, mainActivity);
     }
 
     void setIcon(final ViewHolder viewHolder, final FileDetail fileDetail) {
@@ -80,30 +74,76 @@ public class AdapterDetailedList extends
         final String ext = FilenameUtils.getExtension(fileName);
         if (fileDetail.isFolder()) {
             viewHolder.icon.setImageResource(R.color.file_folder);
-        }
-        else {
+        } else {
             viewHolder.icon.setImageResource(R.color.file_text);
         }
 
     }
 
-    public Filter getFilter(){
-        if(customFilter==null){
-            customFilter= new CustomFilter();
-        }
-        return customFilter;
-    }
 
-    public static class ViewHolder {
+    protected static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
 
         // Name of the file
         public TextView nameLabel;
 
         // Size of the file
-        public TextView detailLabel;
+        public TextView sizeLabel;
+
+        public TextView dataLabel;
 
         // Icon of the file
         public ImageView icon;
+        MainActivity mainActivity;
+
+//TODO 解决问题
+        public ViewHolder(View itemView,final MainActivity mainActivity) {
+            super(itemView);
+            nameLabel = (TextView) itemView.findViewById(R.id.text1);
+            sizeLabel = (TextView) itemView.findViewById(R.id.text2);
+            dataLabel = (TextView) itemView.findViewById(R.id.text3);
+            icon = (ImageView) itemView.findViewById(R.id.icon);
+            this.mainActivity=mainActivity;
+            itemView.setOnClickListener(this );
+        }
+        
+        
+        
+        public void onClick(View v) {
+
+            String name = nameLabel.getText().toString();
+
+            Log.d("s", "onClick" + getAdapterPosition() + name + mainActivity.currentFolder);
+
+            if (name.equals("..")) {
+
+                if (mainActivity.currentFolder.equals("/")) {
+                    new UpdateList(mainActivity).execute(Environment.getExternalStorageDirectory().getAbsolutePath());
+                } else {
+                    File tempFile = new File(mainActivity.currentFolder);
+                    if (tempFile.isFile()) {
+                        tempFile = tempFile.getParentFile()
+                                .getParentFile();
+                    } else {
+                        tempFile = tempFile.getParentFile();
+                    }
+                    new UpdateList(mainActivity).execute(tempFile.getAbsolutePath());
+                }
+                return;
+            } else if
+                    (name.equals(mainActivity.getString(R.string.home))) {
+                new UpdateList(mainActivity).execute(Environment.getExternalStorageDirectory().getAbsolutePath());
+                return;
+            }
+
+            final File selectedFile = new File(mainActivity.currentFolder, name);
+
+            if (selectedFile.isDirectory()) {
+                new UpdateList(mainActivity).execute(selectedFile.getAbsolutePath());
+                Log.d("f", "onClick" + getAdapterPosition() + mainActivity.currentFolder);
+            }
+        }
+
     }
 
     public static class FileDetail {
@@ -134,37 +174,6 @@ public class AdapterDetailedList extends
 
         public boolean isFolder() {
             return isFolder;
-        }
-    }
-
-    private class CustomFilter extends Filter {
-
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            FilterResults results = new FilterResults();
-            if (constraint == null || constraint.length() == 0) {
-                results.values = orig;
-                results.count = orig.size();
-            } else {
-                LinkedList<FileDetail> nHolderList = new LinkedList<>();
-                for (FileDetail h : orig) {
-                    if (h.getName().toLowerCase().contains(constraint.toString().toLowerCase()))
-                        nHolderList.add(h);
-                }
-                results.values = nHolderList;
-                results.count = nHolderList.size();
-            }
-            return results;
-        }
-
-        @SuppressWarnings("unchecked")
-        @Override
-        protected void publishResults(CharSequence constraint,
-                                      FilterResults results) {
-
-
-            fileDetails = (LinkedList<FileDetail>) results.values;
-            notifyDataSetChanged();
         }
     }
 }

@@ -17,44 +17,58 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_vertical|start"
-    android:minHeight="72dp"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp">
+<RelativeLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent"
+    android:padding="2dp"
+    android:background="?android:attr/selectableItemBackground" xmlns:android="http://schemas.android.com/apk/res/android">
+
+
 
     <ImageView
-        android:id="@android:id/icon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@color/file_folder" />
+        android:id="@+id/icon"
+        android:layout_width="48.0dp"
+        android:layout_height="48.0dp"
+        android:background="@color/file_folder"
+        android:layout_marginEnd="2.0dip"
+        android:layout_centerVertical="true"
+        />
 
     <TextView
-        android:id="@android:id/text1"
+        android:id="@+id/text1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxLines="1"
-        android:textSize="15sp"
-        android:ellipsize="end"
-        android:paddingStart="56dp"
-        android:paddingLeft="56dp"
-        android:text="FILE NAME" />
+        android:textSize="12sp"
+        android:ellipsize="marquee"
+        android:text="FILE NAME"
+        android:layout_toEndOf="@id/icon"
+        android:layout_alignTop="@id/icon"
+        />
 
     <TextView
-        android:id="@android:id/text2"
+        android:id="@+id/text2"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_alignBottom="@android:id/icon"
+        android:layout_alignBottom="@id/icon"
         android:maxLines="1"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:enabled="false"
-        android:ellipsize="end"
-        android:paddingStart="56dp"
-        android:paddingLeft="56dp"
-        android:text="DETAIL 1" />
+        android:ellipsize="marquee"
+        android:text="FILE SIZE"
+        android:layout_toEndOf="@id/icon"
+       />
+
+    <TextView
+        android:id="@+id/text3"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_alignBottom="@id/icon"
+        android:maxLines="1"
+        android:textSize="12sp"
+        android:enabled="false"
+        android:ellipsize="marquee"
+        android:text="FILE DATE"
+        android:layout_alignParentEnd="true"
+
+        />
 
 </RelativeLayout>

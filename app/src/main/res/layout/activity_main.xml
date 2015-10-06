@@ -23,9 +23,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ListView
+            <android.support.v7.widget.RecyclerView
                 android:cacheColorHint="@null"
-                android:id="@android:id/list"
+                android:id="@+id/list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:smoothScrollbar="true"
@@ -49,7 +49,6 @@
         android:fitsSystemWindows="true"
         android:layout_gravity="end"
         app:insetForeground="#4000"
-        android:elevation="@dimen/toolbar_elevation"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
 

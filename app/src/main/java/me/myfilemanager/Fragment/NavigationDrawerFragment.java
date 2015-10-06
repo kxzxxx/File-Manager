@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,9 +29,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import me.myfilemanager.NavigationDrawerAdapter;
+import me.myfilemanager.Adapter.NavigationDrawerAdapter;
 import me.myfilemanager.NavigationDrawerCallbacks;
-import me.myfilemanager.NavigationItem;
+import me.myfilemanager.Utils.NavigationItem;
 import me.myfilemanager.R;
 import me.myfilemanager.ScrimInsetsFrameLayout;
 
@@ -250,24 +249,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     }
 
 
-    /**
-     * Changes the icon of the drawer to back
-     */
-    public void showBackButton() {
-        if (getActivity() instanceof ActionBarActivity) {
-            ((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-    }
 
-    /**
-     * Changes the icon of the drawer to menu
-     */
-    public void showDrawerButton() {
-        if (getActivity() instanceof ActionBarActivity) {
-            ((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        }
-        mActionBarDrawerToggle.syncState();
-    }
 
     void selectItem(int position) {
         mCurrentSelectedPosition = position;
@@ -301,13 +283,6 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         selectItem(position);
     }
 
-    public DrawerLayout getDrawerLayout() {
-        return mDrawerLayout;
-    }
-
-    public void setDrawerLayout(DrawerLayout drawerLayout) {
-        mDrawerLayout = drawerLayout;
-    }
 
     public static void saveSharedSetting(Context ctx, String settingName, String settingValue) {
         SharedPreferences sharedPref = ctx.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
