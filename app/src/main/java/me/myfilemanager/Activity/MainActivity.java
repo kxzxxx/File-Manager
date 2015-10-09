@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
 
     public
     @InjectView(R.id.list)
-    RecyclerView listView;
+    RecyclerView recyclerView;
 
     NavigationDrawerFragment mNavigationDrawerFragment;
 
@@ -60,18 +60,20 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.fragment_drawer);
         mNavigationDrawerFragment.setup(R.id.fragment_drawer, (CustomDrawer) findViewById(R.id.drawer), ab);
 
-        //setup listview
+        //setup recyclerView
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        listView.setLayoutManager(layoutManager);
-        //  listView.setTextFilterEnabled(true);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
+        //  recyclerView.setTextFilterEnabled(true);
 
         //获取主储存路径
 
         String homePath = Environment.getExternalStorageDirectory().getAbsolutePath();
         File file = new File(homePath);
-        Log.d(TAG, "获取主储存路径" + homePath + file.getAbsolutePath());
+        Log.d(TAG, "获取主储存路径" + homePath);
 
-        new UpdateList(this).execute(file.getAbsolutePath());
+    //    new UpdateList(this).execute(file.getAbsolutePath());
+
 
     }
 
@@ -114,20 +116,13 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
 
 
     public void onNavigationDrawerItemSelected(int itemPosition) {
+        String select = mNavigationDrawerFragment.adapter.getList().get(itemPosition).getText();
 
-        String[] listNames = getResources().getStringArray(R.array.student);
-
-        Log.d(TAG, String.format("Select item : %d", itemPosition + 1));
-
-
-        FragmentManager manager = getFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        Log.d(TAG, String.format("Select item : %d  "+select, itemPosition + 1));
 
 
+        new UpdateList(this).execute(select);
 
-
-        transaction.commit();
 
     }
 

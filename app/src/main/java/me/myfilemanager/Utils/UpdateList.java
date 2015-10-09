@@ -29,13 +29,11 @@ public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetail
     //异步加载文件夹目录
     String exceptionMessage;
     MainActivity activity;
-    RecyclerView listView;
 
 
     public UpdateList(MainActivity activity) {
         super();
         this.activity = activity;
-        this.listView = activity.listView;
     }
 
     @Override
@@ -134,7 +132,9 @@ public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetail
         if (names != null) {
             boolean isRoot = activity.currentFolder.equals("/");
             AdapterDetailedList mAdapter = new AdapterDetailedList(activity, names, isRoot);
-            listView.setAdapter(mAdapter);
+
+
+            activity.recyclerView.setAdapter(mAdapter);
             //       filter = mAdapter.getFilter();
         }
         if (exceptionMessage != null) {

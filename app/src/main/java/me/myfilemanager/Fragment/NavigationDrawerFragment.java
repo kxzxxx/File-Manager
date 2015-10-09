@@ -52,6 +52,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     private int mCurrentSelectedPosition;
     private static final Pattern DIR_SEPARATOR = Pattern.compile("/");
     private String TAG = NavigationDrawerFragment.class.getSimpleName();
+   public static NavigationDrawerAdapter adapter;
 
 
     @Nullable
@@ -64,12 +65,21 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         mDrawerList.setLayoutManager(layoutManager);
         mDrawerList.setHasFixedSize(true);
 
-        final List<NavigationItem> navigationItems = getMenu();
-        NavigationDrawerAdapter adapter = new NavigationDrawerAdapter(navigationItems);
+        List<NavigationItem> navigationItems = getMenu();
+        adapter = new NavigationDrawerAdapter(navigationItems);
         adapter.setNavigationDrawerCallbacks(this);
         mDrawerList.setAdapter(adapter);
         selectItem(mCurrentSelectedPosition);
         return view;
+    }
+
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mCallbacks = (NavigationDrawerCallbacks) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Activity must implement NavigationDrawerCallbacks.");
+        }
     }
 
     @Override
@@ -82,15 +92,6 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         }
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mCallbacks = (NavigationDrawerCallbacks) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException("Activity must implement NavigationDrawerCallbacks.");
-        }
-    }
 
 
     public void setup(int fragmentId, DrawerLayout drawerLayout, Toolbar toolbar) {
@@ -161,7 +162,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         for (String i : item) {
             items.add(new NavigationItem(i));
 
-            Log.d(TAG, i);
+            Log.d(TAG,"add"+ i);
 
         }
 
@@ -253,10 +254,12 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
 
     void selectItem(int position) {
         mCurrentSelectedPosition = position;
+
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
         if (mCallbacks != null) {
+            Log.d("NavigationDrawer","Click"+adapter.getList().get(     position).getText());
             mCallbacks.onNavigationDrawerItemSelected(position);
         }
         ((NavigationDrawerAdapter) mDrawerList.getAdapter()).selectPosition(position);
@@ -280,6 +283,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
+
         selectItem(position);
     }
 

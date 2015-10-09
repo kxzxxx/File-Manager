@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
+import android.util.Log;
 
 import me.myfilemanager.NavigationDrawerCallbacks;
 import me.myfilemanager.Utils.NavigationItem;
@@ -20,7 +21,6 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     private List<NavigationItem> mData;
     private NavigationDrawerCallbacks mNavigationDrawerCallbacks;
     private int mSelectedPosition;
-    // private int mTouchedPosition = -1;
 
     public NavigationDrawerAdapter(List<NavigationItem> data) {
         mData = data;
@@ -37,6 +37,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
         vH.itemView.setOnClickListener(new View.OnClickListener() {
                                            @Override
                                            public void onClick(View v) {
+
                                                if (mNavigationDrawerCallbacks != null)
                                                    mNavigationDrawerCallbacks.onNavigationDrawerItemSelected(vH.getAdapterPosition());
                                            }
@@ -65,6 +66,11 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     @Override
     public int getItemCount() {
         return mData != null ? mData.size() : 0;
+    }
+
+    public List<NavigationItem>  getList() {
+
+        return this.mData;
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
