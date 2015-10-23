@@ -26,7 +26,6 @@ import me.myfilemanager.R;
  */
 public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetailedList.FileDetail>> {
 
-    //异步加载文件夹目录
     String exceptionMessage;
     MainActivity activity;
 
@@ -135,13 +134,11 @@ public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetail
 
 
             activity.recyclerView.setAdapter(mAdapter);
-            //       filter = mAdapter.getFilter();
         }
         if (exceptionMessage != null) {
             Toast.makeText(activity, exceptionMessage, Toast.LENGTH_SHORT).show();
         }
         activity.invalidateOptionsMenu();
-        Log.d("u",activity.currentFolder);
         super.onPostExecute(names);
     }
 

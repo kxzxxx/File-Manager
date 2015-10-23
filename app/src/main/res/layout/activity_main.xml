@@ -31,6 +31,7 @@
                 android:smoothScrollbar="true"
                 android:listSelector="?selectableItemBackground"
                 android:divider="@null"
+                android:scrollbars="vertical"
                 android:layout_marginLeft="@dimen/list_horizontal_margin"
                 android:layout_marginRight="@dimen/list_horizontal_margin"
                 android:layout_marginStart="@dimen/list_horizontal_margin"
@@ -41,7 +42,7 @@
 
     </LinearLayout>
     <!-- android:layout_marginTop="?android:attr/actionBarSize"-->
-    <me.myfilemanager.ScrimInsetsFrameLayout
+    <me.myfilemanager.Fragment.ScrimInsetsFrameLayout
         style="@style/Elevation"
         android:id="@+id/scrimInsetsFrameLayout"
         android:layout_width="@dimen/navigation_drawer_width"
@@ -58,7 +59,7 @@
             android:layout_width="@dimen/navigation_drawer_width"
             android:layout_height="match_parent"
             android:layout_gravity="end" />
-    </me.myfilemanager.ScrimInsetsFrameLayout>
+    </me.myfilemanager.Fragment.ScrimInsetsFrameLayout>
 
 
 </me.myfilemanager.Custom.CustomDrawer>

@@ -7,9 +7,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
-import android.util.Log;
 
-import me.myfilemanager.NavigationDrawerCallbacks;
+import me.myfilemanager.Callback.NavigationDrawerCallbacks;
 import me.myfilemanager.Utils.NavigationItem;
 import me.myfilemanager.R;
 
@@ -51,8 +50,6 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     public void onBindViewHolder(NavigationDrawerAdapter.ViewHolder viewHolder, final int i) {
         viewHolder.textView.setText(mData.get(i).getText());
         viewHolder.textView.setCompoundDrawablesWithIntrinsicBounds(mData.get(i).getDrawable(), null, null, null);
-
-
 
     }
 

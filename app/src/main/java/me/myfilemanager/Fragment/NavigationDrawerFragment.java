@@ -30,10 +30,9 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import me.myfilemanager.Adapter.NavigationDrawerAdapter;
-import me.myfilemanager.NavigationDrawerCallbacks;
+import me.myfilemanager.Callback.NavigationDrawerCallbacks;
 import me.myfilemanager.Utils.NavigationItem;
 import me.myfilemanager.R;
-import me.myfilemanager.ScrimInsetsFrameLayout;
 
 /**
  * Created by poliveira on 24/10/2014.
@@ -49,7 +48,9 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     private boolean mUserLearnedDrawer;
     private boolean mFromSavedInstanceState;
+    private boolean mClickItem;
     private int mCurrentSelectedPosition;
+
     private static final Pattern DIR_SEPARATOR = Pattern.compile("/");
     private String TAG = NavigationDrawerFragment.class.getSimpleName();
    public static NavigationDrawerAdapter adapter;
@@ -69,7 +70,7 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         adapter = new NavigationDrawerAdapter(navigationItems);
         adapter.setNavigationDrawerCallbacks(this);
         mDrawerList.setAdapter(adapter);
-        selectItem(mCurrentSelectedPosition);
+    if(mFromSavedInstanceState )  selectItem(mCurrentSelectedPosition);
         return view;
     }
 
@@ -109,6 +110,11 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
+                if (mCallbacks != null&&mClickItem) {
+                Log.d("NavigationDrawer", "Click" + adapter.getList().get(mCurrentSelectedPosition).getText());
+                mCallbacks.onNavigationDrawerItemSelected(mCurrentSelectedPosition);
+                mClickItem=false;
+                }
                 if (!isAdded()) return;
                 getActivity().invalidateOptionsMenu();
             }
@@ -258,10 +264,8 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
-        if (mCallbacks != null) {
-            Log.d("NavigationDrawer","Click"+adapter.getList().get(     position).getText());
-            mCallbacks.onNavigationDrawerItemSelected(position);
-        }
+        mClickItem=true;
+
         ((NavigationDrawerAdapter) mDrawerList.getAdapter()).selectPosition(position);
     }
 
@@ -283,7 +287,6 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-
         selectItem(position);
     }
 

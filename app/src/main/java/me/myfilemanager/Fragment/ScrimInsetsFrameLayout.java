@@ -1,4 +1,4 @@
-package me.myfilemanager;
+package me.myfilemanager.Fragment;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -8,6 +8,8 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
+
+import me.myfilemanager.R;
 
 
 /**

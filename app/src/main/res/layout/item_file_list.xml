@@ -17,58 +17,76 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<RelativeLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent"
+<RelativeLayout android:orientation="vertical" android:layout_width="fill_parent"
+    android:layout_height="68dp"
     android:padding="2dp"
     android:background="?android:attr/selectableItemBackground" xmlns:android="http://schemas.android.com/apk/res/android">
 
 
-
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBox"
+        android:layout_centerVertical="true"
+ />
     <ImageView
         android:id="@+id/icon"
-        android:layout_width="48.0dp"
-        android:layout_height="48.0dp"
-        android:background="@color/file_folder"
+        android:layout_toEndOf="@id/checkBox"
+        android:layout_width="64.0dp"
+        android:layout_height="64.0dp"
+android:contentDescription="@string/app_name"
         android:layout_marginEnd="2.0dip"
         android:layout_centerVertical="true"
         />
 
+    <RelativeLayout
+        android:id="@+id/RelativeLayout"
+        android:layout_height="32dp"
+        android:layout_width="fill_parent"
+        android:layout_toEndOf="@id/icon"
+        xmlns:android="http://schemas.android.com/apk/res/android">
     <TextView
         android:id="@+id/text1"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:maxLines="1"
-        android:textSize="12sp"
-        android:ellipsize="marquee"
-        android:text="FILE NAME"
-        android:layout_toEndOf="@id/icon"
-        android:layout_alignTop="@id/icon"
-        />
+        android:textColor="?android:attr/textColorPrimary"
+        android:textSize="16sp"
+        android:ellipsize="end"
+        android:layout_alignParentBottom="true"
+        android:fontFamily="sans-serif"
+       />
+</RelativeLayout>
 
+    <RelativeLayout
+        android:layout_below="@id/RelativeLayout"
+        android:layout_toEndOf="@id/icon"
+        android:layout_height="32dp"
+        android:layout_width="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android">
     <TextView
         android:id="@+id/text2"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_alignBottom="@id/icon"
+        android:layout_centerVertical="true"
         android:maxLines="1"
-        android:textSize="12sp"
         android:enabled="false"
-        android:ellipsize="marquee"
-        android:text="FILE SIZE"
-        android:layout_toEndOf="@id/icon"
+        android:layout_alignParentTop="true"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
        />
-
     <TextView
         android:id="@+id/text3"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_alignBottom="@id/icon"
         android:maxLines="1"
-        android:textSize="12sp"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
         android:enabled="false"
-        android:ellipsize="marquee"
-        android:text="FILE DATE"
+        android:layout_centerVertical="true"
+        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
 
         />
+</RelativeLayout>
+
+
 
 </RelativeLayout>

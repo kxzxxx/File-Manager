@@ -5,9 +5,14 @@ import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,6 +37,13 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
     //list of file details
     LinkedList<FileDetail> fileDetails;
     MainActivity mainActivity;
+    SparseBooleanArray mSelectedItemsIds;
+    public boolean stoppedAnimation=false;
+    Animation localAnimation;
+    int anim;
+    int offset=100;
+    // Allows to remember the last item shown on screen
+   int lastPosition = -1;
 
     public AdapterDetailedList(final MainActivity mainActivity,
                                final LinkedList<FileDetail> fileDetails,
@@ -40,20 +52,64 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
         this.mainActivity=mainActivity;
         this.orig = fileDetails;
         this.context = mainActivity;
-        //    this.inflater = LayoutInflater.from(context);
+        mSelectedItemsIds = new SparseBooleanArray();
+
         if (!isRoot) {
-            this.fileDetails.addFirst(new FileDetail("..", context.getString(R.string.folder), ""));
+            this.fileDetails.addFirst(new FileDetail("..", context.getString(R.string.parent_dir), ""));
         } else {
             this.fileDetails.addFirst(new FileDetail(context.getString(R.string.home), context.getString(R.string.folder), ""));
         }
+        anim = /*main.IS_LIST?R.anim.fade_in_top:*/R.anim.fade_in_top;
+    }
+    @Override
+    public void onViewDetachedFromWindow(AdapterDetailedList.ViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        holder.itemView.clearAnimation();
     }
 
+    @Override
+    public boolean onFailedToRecycleView(AdapterDetailedList.ViewHolder holder) {
+        holder.itemView.clearAnimation();
+        return super.onFailedToRecycleView(holder);
+    }
+    void animate(AdapterDetailedList.ViewHolder holder,int position){
+        if (position > lastPosition)
+        {
+        holder.itemView.clearAnimation();
+        localAnimation = AnimationUtils.loadAnimation(context, anim);
+        localAnimation.setStartOffset(this.offset);
+        holder.itemView.startAnimation(localAnimation);
+            lastPosition = position;
 
+       // this.offset+=30;
+    }
+
+    }
     public void onBindViewHolder(AdapterDetailedList.ViewHolder viewHolder, final int i) {
-
         setIcon(viewHolder, fileDetails.get(i));
+        viewHolder.checkBox.setVisibility(View.VISIBLE);
+        Log.d("取得文件名", fileDetails.get(i).getName());
+
+        if(fileDetails.get(i).getName().equals("..")) viewHolder.checkBox.setVisibility(View.INVISIBLE);
+        viewHolder.checkBox.setOnCheckedChangeListener(null);
+        viewHolder.checkBox.setChecked(false);
+        if(mSelectedItemsIds.get(i,false))viewHolder.checkBox.setChecked(true);
         viewHolder.nameLabel.setText(fileDetails.get(i).getName());
-        //  viewHolder.sizeLabel.setText(fileDetail.getSize() + "\t\t" + fileDetail.getDateModified());
+        viewHolder.sizeLabel.setText(fileDetails.get(i).getSize());
+        viewHolder.dataLabel.setText(fileDetails.get(i).getDateModified());
+
+        viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView,
+                                         boolean isChecked) {
+                if (isChecked) {
+                    mSelectedItemsIds.put(i, true);
+                } else {mSelectedItemsIds.put(i, false);
+                }
+            }
+        });
+
+        if (!this.stoppedAnimation)   animate(viewHolder,i);
 
     }
 
@@ -65,6 +121,7 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
 
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(context).inflate(R.layout.item_file_list, viewGroup, false);
+
         return new ViewHolder(v, mainActivity);
     }
 
@@ -73,9 +130,9 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
         final String fileName = fileDetail.getName();
         final String ext = FilenameUtils.getExtension(fileName);
         if (fileDetail.isFolder()) {
-            viewHolder.icon.setImageResource(R.color.file_folder);
+            viewHolder.icon.setImageResource(R.drawable.folder);
         } else {
-            viewHolder.icon.setImageResource(R.color.file_text);
+           viewHolder.icon.setImageResource(R.drawable.file);
         }
 
     }
@@ -94,11 +151,15 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
 
         // Icon of the file
         public ImageView icon;
+
+        public CheckBox checkBox;
+
         MainActivity mainActivity;
 
-//TODO 解决问题
+
         public ViewHolder(View itemView,final MainActivity mainActivity) {
             super(itemView);
+            checkBox = (CheckBox)itemView.findViewById(R.id.checkBox);
             nameLabel = (TextView) itemView.findViewById(R.id.text1);
             sizeLabel = (TextView) itemView.findViewById(R.id.text2);
             dataLabel = (TextView) itemView.findViewById(R.id.text3);
@@ -113,7 +174,6 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
 
             String name = nameLabel.getText().toString();
 
-            Log.d("s", "onClick" + getAdapterPosition() + name + mainActivity.currentFolder);
 
             if (name.equals("..")) {
 
@@ -140,7 +200,7 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
 
             if (selectedFile.isDirectory()) {
                 new UpdateList(mainActivity).execute(selectedFile.getAbsolutePath());
-                Log.d("f", "onClick" + getAdapterPosition() + mainActivity.currentFolder);
+
             }
         }
 
@@ -152,6 +212,7 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
         private final String dateModified;
         private final boolean isFolder;
 
+
         public FileDetail(String name, String size,
                           String dateModified) {
             this.name = name;
@@ -159,6 +220,7 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
             this.dateModified = dateModified;
             isFolder = TextUtils.isEmpty(dateModified);
         }
+
 
         public String getDateModified() {
             return dateModified;

@@ -1,15 +1,6 @@
 <resources>
-    <string name="app_name">My Application</string>
-    <string name="intro_message">
-        <![CDATA[
+    <string name="app_name">File Manager</string>
 
-
-            This sample demonstrates how to use CardView introduced in the support library for the
-            Android L preview.
-
-
-        ]]>
-    </string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="planets">planets</string>
@@ -40,6 +31,7 @@
     <string name="view_it_on_the_web">View it on the web</string>
     <string name="file">File</string>
     <string name="folder">Folder</string>
+    <string name="parent_dir">Parent folder</string>
     <string name="light_theme">Light Theme</string>
     <string name="goto_line">Go to Line…</string>
     <string name="goto_page">Go to Page…</string>

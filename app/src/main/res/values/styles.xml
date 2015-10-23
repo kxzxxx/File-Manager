@@ -1,9 +1,6 @@
 <resources>
 
 
-    <!-- Base application theme. -->
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="AppTheme.Base"></style>
 
     <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/myPrimaryColor</item>
@@ -22,15 +19,7 @@
         <item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
     </style>
 
-    <style name="ToolBar" parent="ToolBarStyle"></style>
 
-
-    <style name="Widget" />
-
-    <style name="Widget.SampleMessage">
-        <item name="android:textAppearance">?android:textAppearanceMedium</item>
-        <item name="android:lineSpacingMultiplier">1.1</item>
-    </style>
 
 
 </resources>

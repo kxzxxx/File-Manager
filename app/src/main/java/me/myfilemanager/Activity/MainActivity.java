@@ -1,12 +1,12 @@
 package me.myfilemanager.Activity;
 
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -14,13 +14,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
+
 import java.io.File;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import me.myfilemanager.Custom.CustomDrawer;
 import me.myfilemanager.Fragment.NavigationDrawerFragment;
-import me.myfilemanager.NavigationDrawerCallbacks;
+import me.myfilemanager.Callback.NavigationDrawerCallbacks;
 import me.myfilemanager.R;
 import me.myfilemanager.Utils.UpdateList;
 
@@ -60,19 +62,27 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.fragment_drawer);
         mNavigationDrawerFragment.setup(R.id.fragment_drawer, (CustomDrawer) findViewById(R.id.drawer), ab);
 
+
         //setup recyclerView
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
+        recyclerView.addItemDecoration(
+                new HorizontalDividerItemDecoration.Builder(this)
+                        .showLastDivider()
+                        .color(Color.LTGRAY)
+                        .sizeResId(R.dimen.divider)
+                        .marginResId(R.dimen.leftmargin, R.dimen.rightmargin)
+                        .build());
         //  recyclerView.setTextFilterEnabled(true);
 
         //获取主储存路径
 
-        String homePath = Environment.getExternalStorageDirectory().getAbsolutePath();
-        File file = new File(homePath);
-        Log.d(TAG, "获取主储存路径" + homePath);
+    //    String homePath = Environment.getExternalStorageDirectory().getAbsolutePath();
+      //  File file = new File(homePath);
 
-    //    new UpdateList(this).execute(file.getAbsolutePath());
+
+        new UpdateList(this).execute(currentFolder);
 
 
     }
@@ -82,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         return super.onCreateOptionsMenu(menu);
     }
 
-    private Toolbar.OnMenuItemClickListener onMenuItemClick = new Toolbar.OnMenuItemClickListener() {
+   Toolbar.OnMenuItemClickListener onMenuItemClick = new Toolbar.OnMenuItemClickListener() {
 
         public boolean onMenuItemClick(MenuItem item) {
             int id = item.getItemId();
@@ -107,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         } else {
             File file = new File(currentFolder);
             String parentFolder = file.getParent();
-            Log.d(TAG, parentFolder);
+
             new UpdateList(this).execute(parentFolder);
         }
 
@@ -116,12 +126,10 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
 
 
     public void onNavigationDrawerItemSelected(int itemPosition) {
-        String select = mNavigationDrawerFragment.adapter.getList().get(itemPosition).getText();
-
-        Log.d(TAG, String.format("Select item : %d  "+select, itemPosition + 1));
 
 
-        new UpdateList(this).execute(select);
+
+        new UpdateList(this).execute(mNavigationDrawerFragment.adapter.getList().get(itemPosition).getText());
 
 
     }
