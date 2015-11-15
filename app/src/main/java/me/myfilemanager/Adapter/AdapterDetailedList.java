@@ -52,13 +52,15 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
         this.mainActivity=mainActivity;
         this.orig = fileDetails;
         this.context = mainActivity;
-        mSelectedItemsIds = new SparseBooleanArray();
+        mSelectedItemsIds = new SparseBooleanArray(1); //save checkbox status
 
         if (!isRoot) {
             this.fileDetails.addFirst(new FileDetail("..", context.getString(R.string.parent_dir), ""));
         } else {
             this.fileDetails.addFirst(new FileDetail(context.getString(R.string.home), context.getString(R.string.folder), ""));
         }
+
+
         anim = /*main.IS_LIST?R.anim.fade_in_top:*/R.anim.fade;
     }
     @Override
@@ -85,31 +87,75 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
     }
 
     }
-    public void onBindViewHolder(AdapterDetailedList.ViewHolder viewHolder, final int i) {
+    public void onBindViewHolder(final AdapterDetailedList.ViewHolder viewHolder, final int i) {
         setIcon(viewHolder, fileDetails.get(i));
         viewHolder.checkBox.setVisibility(View.VISIBLE);
-        Log.d("取得文件名", fileDetails.get(i).getName());
-
+        Log.d("Get file name", fileDetails.get(i).getName());
+        //setup checkbox
         if(fileDetails.get(i).getName().equals("..")) viewHolder.checkBox.setVisibility(View.INVISIBLE);
-        viewHolder.checkBox.setOnCheckedChangeListener(null);
         viewHolder.checkBox.setChecked(false);
-        if(mSelectedItemsIds.get(i,false))viewHolder.checkBox.setChecked(true);
+        if(mSelectedItemsIds.get(i, false))viewHolder.checkBox.setChecked(true);
+
+
+        //setup row
         viewHolder.nameLabel.setText(fileDetails.get(i).getName());
         viewHolder.sizeLabel.setText(fileDetails.get(i).getSize());
         viewHolder.dataLabel.setText(fileDetails.get(i).getDateModified());
 
-        viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView,
-                                         boolean isChecked) {
-                if (isChecked) {
-                    mSelectedItemsIds.put(i, true);
-                } else {mSelectedItemsIds.put(i, false);
+        //setup checkboxlistener
+        viewHolder.checkBox.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                toggleChecked(i); //go actionmode
+            }});
+
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            //load file list
+            public void onClick(View v) {
+
+                String name = viewHolder.nameLabel.getText().toString();
+
+
+                if (name.equals("..")) {
+
+                    if (mainActivity.currentFolder.equals("/")) {
+                        new UpdateList(mainActivity).execute(Environment.getExternalStorageDirectory().getAbsolutePath());
+                    } else {
+                        File tempFile = new File(mainActivity.currentFolder);
+                        if (tempFile.isFile()) {
+                            tempFile = tempFile.getParentFile()
+                                    .getParentFile();
+                        } else {
+                            tempFile = tempFile.getParentFile();
+                        }
+                        new UpdateList(mainActivity).execute(tempFile.getAbsolutePath());
+                    }
+                    return;
+                } else if
+                        (name.equals(mainActivity.getString(R.string.home))) {
+                    new UpdateList(mainActivity).execute(Environment.getExternalStorageDirectory().getAbsolutePath());
+                    return;
+                }
+
+                final File selectedFile = new File(mainActivity.currentFolder, name);
+
+                if (selectedFile.isDirectory()) {
+                    new UpdateList(mainActivity).execute(selectedFile.getAbsolutePath());
                 }
             }
         });
+        viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            public boolean onLongClick(View v) {
 
-        if (!this.stoppedAnimation)   animate(viewHolder,i);
+                if(!mSelectedItemsIds.get(i, false))viewHolder.checkBox.setChecked(true);
+                else viewHolder.checkBox.setChecked(false);
+
+
+
+                toggleChecked(i);
+                return true;
+            }
+
+        });
 
     }
 
@@ -122,7 +168,7 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(context).inflate(R.layout.item_file_list, viewGroup, false);
 
-        return new ViewHolder(v, mainActivity);
+        return new ViewHolder(v);
     }
 
     void setIcon(final ViewHolder viewHolder, final FileDetail fileDetail) {
@@ -132,17 +178,18 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
         if (fileDetail.isFolder()) {
             viewHolder.icon.setImageResource(R.drawable.folder);
         } else {
-           viewHolder.icon.setImageResource(R.drawable.folder);
+           viewHolder.icon.setImageResource(R.drawable.file);
         }
 
     }
 
-    void toggleChecked(View v){
+   public void toggleChecked(final int postion){
 
+       if(mSelectedItemsIds.get(postion, false))mSelectedItemsIds.put(postion, false);
+       else mSelectedItemsIds.put(postion, true);
+   }
 
-    }
-
-    protected static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener {
+    protected static class ViewHolder extends RecyclerView.ViewHolder{
 
 
         // Name of the file
@@ -158,61 +205,16 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
 
         public CheckBox checkBox;
 
-        MainActivity mainActivity;
 
 
-        public ViewHolder(View itemView,final MainActivity mainActivity) {
+        public ViewHolder(View itemView) {
             super(itemView);
             checkBox = (CheckBox)itemView.findViewById(R.id.checkBox);
             nameLabel = (TextView) itemView.findViewById(R.id.text1);
             sizeLabel = (TextView) itemView.findViewById(R.id.text2);
             dataLabel = (TextView) itemView.findViewById(R.id.text3);
             icon = (ImageView) itemView.findViewById(R.id.icon);
-            this.mainActivity=mainActivity;
-            itemView.setOnClickListener(this );
         }
-        
-        public void OnLongClick(View v){
-
-            toggleChecked(v);
-
-        }
-
-        
-        public void onClick(View v) {
-
-            String name = nameLabel.getText().toString();
-
-
-            if (name.equals("..")) {
-
-                if (mainActivity.currentFolder.equals("/")) {
-                    new UpdateList(mainActivity).execute(Environment.getExternalStorageDirectory().getAbsolutePath());
-                } else {
-                    File tempFile = new File(mainActivity.currentFolder);
-                    if (tempFile.isFile()) {
-                        tempFile = tempFile.getParentFile()
-                                .getParentFile();
-                    } else {
-                        tempFile = tempFile.getParentFile();
-                    }
-                    new UpdateList(mainActivity).execute(tempFile.getAbsolutePath());
-                }
-                return;
-            } else if
-                    (name.equals(mainActivity.getString(R.string.home))) {
-                new UpdateList(mainActivity).execute(Environment.getExternalStorageDirectory().getAbsolutePath());
-                return;
-            }
-
-            final File selectedFile = new File(mainActivity.currentFolder, name);
-
-            if (selectedFile.isDirectory()) {
-                new UpdateList(mainActivity).execute(selectedFile.getAbsolutePath());
-
-            }
-        }
-
     }
 
     public static class FileDetail {

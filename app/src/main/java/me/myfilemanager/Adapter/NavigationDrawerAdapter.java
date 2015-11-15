@@ -70,7 +70,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
         return this.mData;
     }
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
+   protected static class ViewHolder extends RecyclerView.ViewHolder {
          final TextView textView;
 
         public ViewHolder(View v) {

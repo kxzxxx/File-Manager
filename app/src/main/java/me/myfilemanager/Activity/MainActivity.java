@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(
                 new HorizontalDividerItemDecoration.Builder(this)
-                        .showLastDivider()
+
                         .color(Color.LTGRAY)
                         .sizeResId(R.dimen.divider)
                         .marginResId(R.dimen.leftmargin, R.dimen.rightmargin)

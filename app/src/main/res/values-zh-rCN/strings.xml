@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home">主文件夹</string>
+    <string name="file">文件</string>
+    <string name="folder">文件夹</string>
+</resources>

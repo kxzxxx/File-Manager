@@ -27,8 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/checkBox"
-        android:layout_centerVertical="true"
- />
+        android:layout_centerVertical="true" />
     <ImageView
         android:id="@+id/icon"
         android:layout_toEndOf="@id/checkBox"
@@ -36,8 +35,7 @@
         android:layout_height="64.0dp"
 android:contentDescription="@string/app_name"
         android:layout_marginEnd="2.0dip"
-        android:layout_centerVertical="true"
-        />
+        android:layout_centerVertical="true"  />
 
     <RelativeLayout
         android:id="@+id/RelativeLayout"
@@ -67,7 +65,6 @@ android:contentDescription="@string/app_name"
         android:id="@+id/text2"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_centerVertical="true"
         android:maxLines="1"
         android:enabled="false"
         android:layout_alignParentTop="true"
@@ -80,9 +77,8 @@ android:contentDescription="@string/app_name"
         android:maxLines="1"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
         android:enabled="false"
-        android:layout_centerVertical="true"
-        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
 
         />
 </RelativeLayout>
