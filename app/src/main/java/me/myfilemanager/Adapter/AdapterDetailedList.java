@@ -59,7 +59,7 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
         } else {
             this.fileDetails.addFirst(new FileDetail(context.getString(R.string.home), context.getString(R.string.folder), ""));
         }
-        anim = /*main.IS_LIST?R.anim.fade_in_top:*/R.anim.fade_in_top;
+        anim = /*main.IS_LIST?R.anim.fade_in_top:*/R.anim.fade;
     }
     @Override
     public void onViewDetachedFromWindow(AdapterDetailedList.ViewHolder holder) {
@@ -132,13 +132,17 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
         if (fileDetail.isFolder()) {
             viewHolder.icon.setImageResource(R.drawable.folder);
         } else {
-           viewHolder.icon.setImageResource(R.drawable.file);
+           viewHolder.icon.setImageResource(R.drawable.folder);
         }
 
     }
 
+    void toggleChecked(View v){
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+    }
+
+    protected static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener {
 
 
         // Name of the file
@@ -168,7 +172,12 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
             itemView.setOnClickListener(this );
         }
         
-        
+        public void OnLongClick(View v){
+
+            toggleChecked(v);
+
+        }
+
         
         public void onClick(View v) {
 
