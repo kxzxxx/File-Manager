@@ -108,6 +108,9 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
                 toggleChecked(i); //go actionmode
             }});
 
+        if (!this.stoppedAnimation)   animate(viewHolder,i);
+
+
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             //load file list
             public void onClick(View v) {
@@ -151,9 +154,11 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
 
 
 
+
                 toggleChecked(i);
                 return true;
             }
+
 
         });
 

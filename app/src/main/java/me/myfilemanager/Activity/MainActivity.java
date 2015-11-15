@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -27,7 +26,7 @@ import me.myfilemanager.R;
 import me.myfilemanager.Utils.UpdateList;
 
 
-//TODO show file list
+//TODO next animation
 
 
 public class MainActivity extends AppCompatActivity implements NavigationDrawerCallbacks {
