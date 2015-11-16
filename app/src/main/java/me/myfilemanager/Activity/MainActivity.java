@@ -10,7 +10,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
@@ -32,9 +34,10 @@ import me.myfilemanager.Utils.UpdateList;
 public class MainActivity extends AppCompatActivity implements NavigationDrawerCallbacks {
     public static String currentFolder;
     String TAG = MainActivity.class.getSimpleName();
+    public ActionMode mActionMode;
 
     @InjectView(R.id.toolbar_actionbar)
-    Toolbar ab;
+   public Toolbar ab;
 
     public
     @InjectView(R.id.list)
@@ -68,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(
                 new HorizontalDividerItemDecoration.Builder(this)
-
                         .color(Color.LTGRAY)
                         .sizeResId(R.dimen.divider)
                         .marginResId(R.dimen.leftmargin, R.dimen.rightmargin)
@@ -123,6 +125,45 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
 
     }
 
+    public ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+
+        // Called when the action mode is created; startActionMode() was called
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            // Inflate a menu resource providing context menu items
+
+            getMenuInflater().inflate(R.menu.menu_main, menu);
+            return true;
+        }
+
+        // Called each time the action mode is shown. Always called after onCreateActionMode, but
+        // may be called multiple times if the mode is invalidated.
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false; // Return false if nothing is done
+        }
+
+        // Called when the user selects a contextual menu item
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                int id = item.getItemId();
+                //noinspection SimplifiableIfStatement
+                if (id == R.id.action_settings) {
+                    Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                    MainActivity.this.startActivity(intent);
+                    return true;
+                }
+
+                return true;
+
+        }
+
+        // Called when the user exits the action mode
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            mActionMode = null;
+        }
+    };
 
     public void onNavigationDrawerItemSelected(int itemPosition) {
 

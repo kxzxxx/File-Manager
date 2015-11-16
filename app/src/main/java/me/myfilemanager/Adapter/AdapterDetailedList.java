@@ -19,6 +19,7 @@ import android.widget.TextView;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import me.myfilemanager.Activity.MainActivity;
@@ -52,7 +53,7 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
         this.mainActivity=mainActivity;
         this.orig = fileDetails;
         this.context = mainActivity;
-        mSelectedItemsIds = new SparseBooleanArray(1); //save checkbox status
+        mSelectedItemsIds = new SparseBooleanArray(0); //save checkbox status
 
         if (!isRoot) {
             this.fileDetails.addFirst(new FileDetail("..", context.getString(R.string.parent_dir), ""));
@@ -108,14 +109,14 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
                 toggleChecked(i); //go actionmode
             }});
 
-        if (!this.stoppedAnimation)   animate(viewHolder,i);
+      //  if (!this.stoppedAnimation)   animate(viewHolder,i);
 
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             //load file list
             public void onClick(View v) {
 
-                String name = viewHolder.nameLabel.getText().toString();
+                String name = fileDetails.get(i).getName();
 
 
                 if (name.equals("..")) {
@@ -192,8 +193,32 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
 
        if(mSelectedItemsIds.get(postion, false))mSelectedItemsIds.put(postion, false);
        else mSelectedItemsIds.put(postion, true);
+
+
+       //start actionmode
+    if(mainActivity.mActionMode==null){
+        mainActivity.mActionMode = mainActivity.ab.startActionMode(mainActivity.mActionModeCallback); }
+
+      // mainActivity.mActionMode.invalidate();
+
+     //  if (getCheckedItemPositions().size() == 0) {
+     //      if(mainActivity.mActionMode!=null)
+      //         mainActivity.mActionMode.finish();
+      //     mainActivity.mActionMode = null;
+     //  }
    }
 
+    public LinkedList<Integer> getCheckedItemPositions() {
+        LinkedList<Integer> checkedItemPositions = new LinkedList<>();
+
+        for (int i = 0; i < mSelectedItemsIds.size(); i++) {
+            if (mSelectedItemsIds.get(i)) {
+                (checkedItemPositions).add(i);
+            }
+        }
+
+        return checkedItemPositions;
+    }
     protected static class ViewHolder extends RecyclerView.ViewHolder{
 
 
