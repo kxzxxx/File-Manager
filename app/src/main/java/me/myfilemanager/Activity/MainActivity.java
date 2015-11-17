@@ -21,6 +21,7 @@ import java.io.File;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import me.myfilemanager.Adapter.AdapterDetailedList;
 import me.myfilemanager.Custom.CustomDrawer;
 import me.myfilemanager.Fragment.NavigationDrawerFragment;
 import me.myfilemanager.Callback.NavigationDrawerCallbacks;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     public static String currentFolder;
     String TAG = MainActivity.class.getSimpleName();
     public ActionMode mActionMode;
+    public boolean actionMode=false;
 
     @InjectView(R.id.toolbar_actionbar)
    public Toolbar ab;
@@ -44,11 +46,11 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     RecyclerView recyclerView;
 
     NavigationDrawerFragment mNavigationDrawerFragment;
+ public    AdapterDetailedList mAdapter=new AdapterDetailedList();
 
 
     protected void onCreate(Bundle savedInstanceState) {
         currentFolder = Environment.getExternalStorageDirectory().getAbsolutePath();
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
@@ -75,6 +77,10 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                         .sizeResId(R.dimen.divider)
                         .marginResId(R.dimen.leftmargin, R.dimen.rightmargin)
                         .build());
+        recyclerView.setAdapter(mAdapter);
+
+        new UpdateList(this).execute(currentFolder);
+
         //  recyclerView.setTextFilterEnabled(true);
 
         //获取主储存路径
@@ -83,7 +89,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
       //  File file = new File(homePath);
 
 
-        new UpdateList(this).execute(currentFolder);
+
+
 
 
     }
@@ -161,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         // Called when the user exits the action mode
         @Override
         public void onDestroyActionMode(ActionMode mode) {
+            actionMode = false;
             mActionMode = null;
         }
     };

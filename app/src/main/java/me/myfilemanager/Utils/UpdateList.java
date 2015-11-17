@@ -128,18 +128,17 @@ public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetail
      */
     @Override
     protected void onPostExecute(final LinkedList<AdapterDetailedList.FileDetail> names) {
+        super.onPostExecute(names);
         if (names != null) {
             boolean isRoot = activity.currentFolder.equals("/");
-            AdapterDetailedList mAdapter = new AdapterDetailedList(activity, names, isRoot);
-
-
-            activity.recyclerView.setAdapter(mAdapter);
+            activity.mAdapter = new AdapterDetailedList(activity, names, isRoot);
+            activity.mAdapter.notifyDataSetChanged();
         }
         if (exceptionMessage != null) {
             Toast.makeText(activity, exceptionMessage, Toast.LENGTH_SHORT).show();
         }
         activity.invalidateOptionsMenu();
-        super.onPostExecute(names);
+
     }
 
     public final Comparator<File> getFileNameComparator() {
