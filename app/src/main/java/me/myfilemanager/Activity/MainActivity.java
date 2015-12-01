@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     RecyclerView recyclerView;
 
     NavigationDrawerFragment mNavigationDrawerFragment;
- public    AdapterDetailedList mAdapter=new AdapterDetailedList();
+
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                         .sizeResId(R.dimen.divider)
                         .marginResId(R.dimen.leftmargin, R.dimen.rightmargin)
                         .build());
-        recyclerView.setAdapter(mAdapter);
+       // recyclerView.setAdapter(mAdapter);
 
         new UpdateList(this).execute(currentFolder);
 

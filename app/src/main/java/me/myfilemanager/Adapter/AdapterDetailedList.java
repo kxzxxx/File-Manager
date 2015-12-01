@@ -93,7 +93,7 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
         viewHolder.checkBox.setVisibility(View.VISIBLE);
         Log.d("Get file name", fileDetails.get(i).getName());
         //setup checkbox
-        if (fileDetails.get(i).getName().equals(".."))
+        if (i==0)
             viewHolder.checkBox.setVisibility(View.INVISIBLE);
         viewHolder.checkBox.setChecked(false);
         if (mSelectedItemsIds.get(i, false)) viewHolder.checkBox.setChecked(true);
