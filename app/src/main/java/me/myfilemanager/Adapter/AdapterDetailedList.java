@@ -112,6 +112,7 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
                     toggleChecked(i); //go actionmode
                 }
             });
+            if(i!=0){
             viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 public boolean onLongClick(View v) {
 
@@ -122,7 +123,8 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
                 }
 
 
-            });
+            });}
+
         }
         //  if (!this.stoppedAnimation)   animate(viewHolder,i);
 
@@ -158,7 +160,8 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
                         if (selectedFile.isDirectory()) {
                             new UpdateList(mainActivity).execute(selectedFile.getAbsolutePath());
                         }
-                    }else{
+                    }else   if(i!=0){
+
                        if (!mSelectedItemsIds.get(i, false)) viewHolder.checkBox.setChecked(true);
                        else viewHolder.checkBox.setChecked(false);
                        toggleChecked(i);
