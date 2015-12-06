@@ -30,7 +30,7 @@ import me.myfilemanager.Utils.UpdateList;
 
 
 //TODO next animation
-
+//TODO save current folder
 
 public class MainActivity extends AppCompatActivity implements NavigationDrawerCallbacks {
     public static String currentFolder;
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                         .build());
        // recyclerView.setAdapter(mAdapter);
 
-        new UpdateList(this).execute(currentFolder);
+     //   new UpdateList(this).execute(currentFolder);
 
         //  recyclerView.setTextFilterEnabled(true);
 
@@ -87,10 +87,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
 
     //    String homePath = Environment.getExternalStorageDirectory().getAbsolutePath();
       //  File file = new File(homePath);
-
-
-
-
 
 
     }
@@ -116,8 +112,14 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     };
 
     public void onBackPressed() {
+        //exit action mode
         if (mNavigationDrawerFragment.isDrawerOpen())
             mNavigationDrawerFragment.closeDrawer();
+       else if(this.mActionMode != null){
+            this.actionMode = false;
+            this.mActionMode.finish();
+            this.mActionMode = null;
+        }
 
         else if (currentFolder.isEmpty() || currentFolder.equals("/")) {
             Log.d(TAG, "finish");
@@ -131,6 +133,11 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
 
 
     }
+
+  public void onStop(){
+      super.onStop();
+      NavigationDrawerFragment.readSharedSetting(this,"currentFolder",currentFolder);
+  }
 
     public ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 

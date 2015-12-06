@@ -92,7 +92,7 @@ public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetail
                     }
                 }
             } else {
-                File[] files = tempFolder.listFiles();
+                File[] files = tempFolder.listFiles();// load file list
 
                 Arrays.sort(files, getFileNameComparator());
 

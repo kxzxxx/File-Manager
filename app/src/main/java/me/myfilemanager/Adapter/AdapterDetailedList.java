@@ -96,6 +96,7 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
         if (i==0)
             viewHolder.checkBox.setVisibility(View.INVISIBLE);
         viewHolder.checkBox.setChecked(false);
+
         if (mSelectedItemsIds.get(i, false)) viewHolder.checkBox.setChecked(true);
 
 

@@ -614,63 +614,6 @@ public class File {
 			return status;
 		}
 	}
-
-	/**
-	 * @see #write(String[], Boolean)
-	 */
-	public Result writeResult(String input) {
-		return writeResult(input.trim().split("\n"), false);
-	}
-
-	public Result writeResult(String[] input, Boolean append) {
-		synchronized (mLock) {
-			Boolean status = false;
-			Result result = null;
-
-			if (input != null && !isDirectory()) {
-				try {
-					BufferedWriter output = new BufferedWriter(new java.io.FileWriter(mFile, append));
-
-					for (String line : input) {
-						output.write(line);
-						output.newLine();
-					}
-
-					output.close();
-					status = true;
-
-				} catch(Throwable e) {
-					String redirect = append ? ">>" : ">";
-					String path = getAbsolutePath();
-
-					for (String line : input) {
-						String escapedInput = oPatternEscape.matcher(line).replaceAll("\\\\$1");
-						Attempts attempts = mShell.createAttempts("echo '" + escapedInput + "' " + redirect + " '" + path + "' 2> /dev/null");
-						result = attempts.execute();
-
-						if (result != null && !(status = result.wasSuccessful())) {
-							break;
-						}
-
-						redirect = ">>";
-					}
-				}
-
-				/*
-				 * Alert other instances using this file, that the state might have changed.
-				 */
-				if (status) {
-					Bundle bundle = new Bundle();
-					bundle.putString("action", "exists");
-					bundle.putString("location", getAbsolutePath());
-
-					Shell.sendBroadcast("file", bundle);
-				}
-			}
-
-			return result;
-		}
-	}
 	
 	/**
 	 * Remove the file. 
