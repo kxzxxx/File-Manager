@@ -6,7 +6,7 @@ android {
     defaultConfig {
         applicationId 'me.myfilemanager'
         minSdkVersion 21
-        targetSdkVersion 23
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
@@ -24,11 +24,11 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'commons-io:commons-io:+'
-    compile files('libs/butterknife.jar')
     compile 'com.yqritc:recyclerview-flexibledivider:+'
     compile 'com.android.support:appcompat-v7:+'
     compile 'com.android.support:support-v4:+'
     compile 'com.android.support:recyclerview-v7:+'
     compile 'com.android.support:multidex:+'
     compile 'jp.wasabeef:recyclerview-animators:+'
+    compile 'com.jakewharton:butterknife:+'
 }

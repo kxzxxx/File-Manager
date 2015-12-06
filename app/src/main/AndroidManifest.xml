@@ -3,31 +3,32 @@
     package="me.myfilemanager">
 
     <!-- To access Google+ APIs: -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/myTheme">
-        <activity
-            android:name="me.myfilemanager.Activity.MainActivity"
-            android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="me.myfilemanager.Activity.SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:parentActivityName="me.myfilemanager.Activity.MainActivity"
-            android:theme="@style/Theme.AppCompat">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="me.myfilemanager.Activity.MainActivity" />
-        </activity>
-    </application>
+      <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
-</manifest>
+
+      <application
+          android:allowBackup="true"
+          android:icon="@mipmap/ic_launcher"
+          android:label="@string/app_name"
+          android:theme="@style/myTheme">
+          <activity
+              android:name="me.myfilemanager.Activity.MainActivity"
+              android:label="@string/app_name">
+              <intent-filter>
+                  <action android:name="android.intent.action.MAIN" />
+                  <category android:name="android.intent.category.LAUNCHER" />
+              </intent-filter>
+          </activity>
+          <activity
+              android:name="me.myfilemanager.Activity.SettingsActivity"
+              android:label="@string/title_activity_settings"
+              android:parentActivityName="me.myfilemanager.Activity.MainActivity"
+              android:theme="@style/Theme.AppCompat">
+              <meta-data
+                  android:name="android.support.PARENT_ACTIVITY"
+                  android:value="me.myfilemanager.Activity.MainActivity" />
+          </activity>
+      </application>
+
+  </manifest>

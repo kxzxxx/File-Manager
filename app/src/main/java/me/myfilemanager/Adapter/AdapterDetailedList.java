@@ -35,8 +35,8 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
     Context context;
     //list of file details
     LinkedList<FileDetail> fileDetails;
-    MainActivity mainActivity;
-    SparseBooleanArray mSelectedItemsIds;
+  static  MainActivity mainActivity;
+   public static SparseBooleanArray mSelectedItemsIds;
     public boolean stoppedAnimation = false;
     Animation localAnimation;
     int anim;

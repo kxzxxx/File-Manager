@@ -27,7 +27,7 @@ import me.myfilemanager.R;
 public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetailedList.FileDetail>> {
 
     String exceptionMessage;
-    MainActivity activity;
+  static   MainActivity activity;
 
 
     public UpdateList(MainActivity activity) {
@@ -66,16 +66,22 @@ public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetail
             activity.currentFolder = tempFolder.getAbsolutePath();
 
             if (!tempFolder.canRead()) {
-                if (RootFW.connect()) {
+                this.cancel(true);
+
+                // pop up a dialog
+
+
+
+                /*if (RootFW.connect()) {
                     com.spazedog.lib.rootfw4.utils.File folder = RootFW.getFile(activity.currentFolder);
                     com.spazedog.lib.rootfw4.utils.File.FileStat[] stats = folder.getDetailedList();
 
                     if (stats != null) {
                         for (com.spazedog.lib.rootfw4.utils.File.FileStat stat : stats) {
-                            /**
+                            *//**
                              * @return
                              *     The file type ('d'=>Directory, 'f'=>File, 'b'=>Block Device, 'c'=>Character Device, 'l'=>Symbolic Link)
-                             */
+                             *//*
                             if (stat.type().equals("d")) {
                                 folderDetails.add(new AdapterDetailedList.FileDetail(stat.name(),
                                         activity.getString(R.string.folder),
@@ -90,7 +96,7 @@ public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetail
                             }
                         }
                     }
-                }
+                }*/
             } else {
                 File[] files = tempFolder.listFiles();// load file list
 
@@ -131,8 +137,8 @@ public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetail
         super.onPostExecute(names);
         if (names != null) {
             boolean isRoot = activity.currentFolder.equals("/");
-            AdapterDetailedList mAdapter = new AdapterDetailedList(activity, names, isRoot);
-            activity.recyclerView.setAdapter(mAdapter);
+            activity.adapter = new AdapterDetailedList(activity, names, isRoot);
+            activity.recyclerView.setAdapter(activity.adapter);
         }
         if (exceptionMessage != null) {
             Toast.makeText(activity, exceptionMessage, Toast.LENGTH_SHORT).show();

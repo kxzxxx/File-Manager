@@ -19,8 +19,8 @@ import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.io.File;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import me.myfilemanager.Adapter.AdapterDetailedList;
 import me.myfilemanager.Custom.CustomDrawer;
 import me.myfilemanager.Fragment.NavigationDrawerFragment;
@@ -37,12 +37,11 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     String TAG = MainActivity.class.getSimpleName();
     public ActionMode mActionMode;
     public boolean actionMode=false;
-
-    @InjectView(R.id.toolbar_actionbar)
-   public Toolbar ab;
+public static AdapterDetailedList adapter;
+    public
+   Toolbar ab;
 
     public
-    @InjectView(R.id.list)
     RecyclerView recyclerView;
 
     NavigationDrawerFragment mNavigationDrawerFragment;
@@ -53,13 +52,14 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         currentFolder = Environment.getExternalStorageDirectory().getAbsolutePath();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.inject(this);
 
 
+        ab=(Toolbar) findViewById(R.id.toolbar_actionbar);
+        recyclerView=( RecyclerView)findViewById(R.id.list);
         //setup toolbar
         setSupportActionBar(ab);
         ab.setOnMenuItemClickListener(onMenuItemClick);
-
+        Log.d(TAG,"load");
 
         //setup drawer
 
@@ -115,11 +115,11 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         //exit action mode
         if (mNavigationDrawerFragment.isDrawerOpen())
             mNavigationDrawerFragment.closeDrawer();
-       else if(this.mActionMode != null){
+      /* else if(this.mActionMode != null){
             this.actionMode = false;
             this.mActionMode.finish();
             this.mActionMode = null;
-        }
+        }*/
 
         else if (currentFolder.isEmpty() || currentFolder.equals("/")) {
             Log.d(TAG, "finish");
@@ -175,6 +175,13 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         // Called when the user exits the action mode
         @Override
         public void onDestroyActionMode(ActionMode mode) {
+          if( adapter.getCheckedItemPositions().size()!=0){
+              adapter.mSelectedItemsIds.clear();
+
+              adapter.notifyDataSetChanged();
+
+          }
+
             actionMode = false;
             mActionMode = null;
         }
