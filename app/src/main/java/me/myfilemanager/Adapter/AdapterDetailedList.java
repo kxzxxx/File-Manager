@@ -134,7 +134,7 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
                 public void onClick(View v) {
                    if(!mainActivity.actionMode) {
                         String name = fileDetails.get(i).getName();
-                        if (name.equals("..")) {
+                        if (i==0) {
 
                             if (mainActivity.currentFolder.equals("/")) {
                                 new UpdateList(mainActivity).execute(Environment.getExternalStorageDirectory().getAbsolutePath());
@@ -148,8 +148,9 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
                                 }
                                 new UpdateList(mainActivity).execute(tempFile.getAbsolutePath());
                             }
-                            return;
-                        } else if
+
+                        }
+                        else if
                                 (name.equals(mainActivity.getString(R.string.home))) {
                             new UpdateList(mainActivity).execute(Environment.getExternalStorageDirectory().getAbsolutePath());
                             return;

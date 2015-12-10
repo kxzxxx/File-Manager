@@ -31,6 +31,8 @@ import me.myfilemanager.Utils.UpdateList;
 
 //TODO next animation
 //TODO save current folder
+//TODO checkbox animation
+// TODO: 2015/12/6 file handler  
 
 public class MainActivity extends AppCompatActivity implements NavigationDrawerCallbacks {
     public static String currentFolder;
