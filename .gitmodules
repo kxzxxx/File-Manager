@@ -1,0 +1,3 @@
+[submodule "rootfw"]
+	path = rootfw
+	url = https://github.com/SpazeDog/rootfw.git
