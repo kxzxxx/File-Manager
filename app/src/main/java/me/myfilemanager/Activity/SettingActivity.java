@@ -32,7 +32,7 @@ public class SettingActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.SettingActivity);
-        ab = (Toolbar) findViewById(R.id.Setting_ToolBar);
+        ab = (Toolbar) findViewById(R.id.setting_toolbar);
 
         setSupportActionBar(ab);
         getFragmentManager().beginTransaction().
