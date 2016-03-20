@@ -104,7 +104,7 @@ public static AdapterDetailedList adapter;
             int id = item.getItemId();
             //noinspection SimplifiableIfStatement
             if (id == R.id.action_settings) {
-                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                Intent intent = new Intent(MainActivity.this, SettingActivity.class);
                 MainActivity.this.startActivity(intent);
                 return true;
             }
@@ -165,7 +165,7 @@ public static AdapterDetailedList adapter;
                 int id = item.getItemId();
                 //noinspection SimplifiableIfStatement
                 if (id == R.id.action_settings) {
-                    Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                    Intent intent = new Intent(MainActivity.this, SettingActivity.class);
                     MainActivity.this.startActivity(intent);
                     return true;
                 }
