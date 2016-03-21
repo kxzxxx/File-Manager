@@ -12,4 +12,9 @@
         android:title="Share"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/pastefile"
+        android:title="Paste"
+        app:showAsAction="never" />
+
 </menu>

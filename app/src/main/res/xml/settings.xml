@@ -12,4 +12,10 @@
         android:name="EditText"
         android:summary="保存一个字符串"
         android:title="Edit Text" />
+    <CheckBoxPreference
+        android:title="贝壳通知栏单词处于最高位置"
+        android:key="boolean_value312"
+        android:summaryOn="当前为最高位置"
+        android:summaryOff="当前为最低位置(默认)"
+        android:defaultValue="false"/>
 </PreferenceScreen>

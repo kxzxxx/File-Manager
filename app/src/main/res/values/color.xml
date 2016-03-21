@@ -24,6 +24,10 @@
     <color name="myNavigationColor">#000000</color>
 
 
+    <color name="myactionModePrimaryColor">#689F38</color>
+    <color name="myactionModePrimaryDarkColor">#558B2F</color>
+
+
     <color name="selected_gray">#ffdbdbdb</color>
 
     <color name="file_folder">#ffbb33</color>

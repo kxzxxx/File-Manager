@@ -14,6 +14,8 @@ import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     public ActionMode mActionMode;
     public boolean actionMode=false;
 public static AdapterDetailedList adapter;
+    int mOldStatusBarColor;
     public
    Toolbar ab;
 
@@ -54,14 +57,14 @@ public static AdapterDetailedList adapter;
         currentFolder = Environment.getExternalStorageDirectory().getAbsolutePath();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+         mOldStatusBarColor = getWindow().getStatusBarColor();
 
         ab=(Toolbar) findViewById(R.id.toolbar_actionbar);
         recyclerView=( RecyclerView)findViewById(R.id.list);
         //setup toolbar
         setSupportActionBar(ab);
         ab.setOnMenuItemClickListener(onMenuItemClick);
-        Log.d(TAG,"load");
+        Log.d(TAG,"load====");
 
         //setup drawer
 
@@ -110,6 +113,12 @@ public static AdapterDetailedList adapter;
                 return true;
             }
 
+            if (id == R.id.pastefile) {
+                // TODO: 2016/3/21 read file path that ready to move or copy
+
+                return true;
+            }
+
             return true;
         }
     };
@@ -149,7 +158,7 @@ public static AdapterDetailedList adapter;
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             // Inflate a menu resource providing context menu items
 
-            getMenuInflater().inflate(R.menu.menu_main, menu);
+            getMenuInflater().inflate(R.menu.filehandler, menu);
             return true;
         }
 
@@ -157,6 +166,8 @@ public static AdapterDetailedList adapter;
         // may be called multiple times if the mode is invalidated.
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+
+            getWindow().setStatusBarColor(getResources().getColor(R.color.myactionModePrimaryDarkColor));
             return false; // Return false if nothing is done
         }
 
@@ -165,11 +176,21 @@ public static AdapterDetailedList adapter;
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 int id = item.getItemId();
                 //noinspection SimplifiableIfStatement
-                if (id == R.id.action_settings) {
+             /*   if (id == R.id.action_settings) {
                     Intent intent = new Intent(MainActivity.this, SettingActivity.class);
                     MainActivity.this.startActivity(intent);
                     return true;
-                }
+                }*/
+            switch (id){
+                case R.id.cutfile:
+                    Toast.makeText(getApplicationContext(), "cut file",
+                            Toast.LENGTH_SHORT).show();
+                    // TODO: 2016/3/21 file manager  put file path to a set
+                    break;
+
+
+            }
+
 
                 return true;
 
@@ -180,7 +201,7 @@ public static AdapterDetailedList adapter;
         public void onDestroyActionMode(ActionMode mode) {
           if( adapter.getCheckedItemPositions().size()!=0){
               adapter.mSelectedItemsIds.clear();
-
+              getWindow().setStatusBarColor(mOldStatusBarColor);
               adapter.notifyDataSetChanged();
 
           }

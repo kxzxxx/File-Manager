@@ -36,11 +36,7 @@ public class SettingActivity extends AppCompatActivity {
     // that hierarchy.
 
 
-    /**
-     * Shows the simplified settings UI if the device configuration if the
-     * device configuration dictates that activity_self_edit simplified, single-pane UI should be
-     * shown.
-     */
+
 
 	public static class SettingPreference extends PreferenceFragment {
 	public void onCreate(final Bundle savedInstanceState){

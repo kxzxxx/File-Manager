@@ -5,6 +5,12 @@
         <item name="android:navigationBarColor">@color/myPrimaryDarkColor</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="actionModeBackground">@color/myactionModePrimaryColor</item>
+        <item name="actionBarPopupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+
+    </style>
+
+    <style name="myDrawerTheme" parent="myTheme">
         <item name="android:statusBarColor">@android:color/transparent</item>
 
     </style>

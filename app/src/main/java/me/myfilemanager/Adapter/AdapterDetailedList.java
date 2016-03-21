@@ -187,8 +187,8 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
 
     void setIcon(final ViewHolder viewHolder, final FileDetail fileDetail) {
 
-        final String fileName = fileDetail.getName();
-        final String ext = FilenameUtils.getExtension(fileName);
+      //  final String fileName = fileDetail.getName();
+    //    final String ext = FilenameUtils.getExtension(fileName);
         if (fileDetail.isFolder()) {
             viewHolder.icon.setImageResource(R.drawable.folder);
         } else {
@@ -202,12 +202,12 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
         if (mSelectedItemsIds.get(postion, false)) mSelectedItemsIds.put(postion, false);
         else mSelectedItemsIds.put(postion, true);
 
-
+if(postion!=0){
         //start actionmode
-        if (!mainActivity.actionMode || mainActivity.mActionMode == null) {
+        if ((!mainActivity.actionMode || mainActivity.mActionMode == null)) {
             mainActivity.actionMode = true;
             mainActivity.mActionMode = mainActivity.ab.startActionMode(mainActivity.mActionModeCallback);
-        }
+        }}
         // mainActivity.mActionMode.invalidate();
 
         if (getCheckedItemPositions().size() == 0) {

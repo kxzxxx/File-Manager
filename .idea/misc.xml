@@ -38,7 +38,7 @@
             <id>Android</id>
           </State>
           <State>
-            <id>Android Lint</id>
+            <id>Android &gt; Lint &gt; Correctness</id>
           </State>
           <State>
             <id>Java</id>

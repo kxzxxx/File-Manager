@@ -15,6 +15,7 @@
           android:label="@string/myapp_name"
           android:theme="@style/myTheme">
           <activity
+              android:theme="@style/myDrawerTheme"
               android:name="me.myfilemanager.Activity.MainActivity"
               android:label="@string/myapp_name">
               <intent-filter>
