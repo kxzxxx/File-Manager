@@ -91,6 +91,7 @@ public static AdapterDetailedList adapter;
       //  File file = new File(homePath);
 
 
+	this.onNavigationDrawerItemSelected(0);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

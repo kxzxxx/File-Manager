@@ -33,7 +33,7 @@
         android:layout_toEndOf="@id/checkBox"
         android:layout_width="64.0dp"
         android:layout_height="64.0dp"
-android:contentDescription="@string/app_name"
+android:contentDescription="@string/myapp_name"
         android:layout_marginEnd="2.0dip"
         android:layout_centerVertical="true"  />
 
