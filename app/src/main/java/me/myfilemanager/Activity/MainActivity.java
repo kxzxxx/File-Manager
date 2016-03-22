@@ -74,6 +74,7 @@ public static AdapterDetailedList adapter;
 
         //setup recyclerView
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setAdapter(null);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(
