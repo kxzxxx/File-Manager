@@ -187,6 +187,12 @@ public static AdapterDetailedList adapter;
                             Toast.LENGTH_SHORT).show();
                     // TODO: 2016/3/21 file manager  put file path to a set
                     break;
+                case R.id.copyfile:
+//adapter.mSelectedItemsIds.
+                    Toast.makeText(getApplicationContext(), "copy file",
+                            Toast.LENGTH_SHORT).show();
+                    // TODO: 2016/3/21 file manager  put file path to a set
+                    break;
 
 
             }
@@ -200,12 +206,15 @@ public static AdapterDetailedList adapter;
         @Override
         public void onDestroyActionMode(ActionMode mode) {
           if( adapter.getCheckedItemPositions().size()!=0){
+
+
               adapter.mSelectedItemsIds.clear();
-              getWindow().setStatusBarColor(mOldStatusBarColor);
-              adapter.notifyDataSetChanged();
+
+adapter.toggleAllCheckbox();
+
 
           }
-
+            getWindow().setStatusBarColor(mOldStatusBarColor);
             actionMode = false;
             mActionMode = null;
         }

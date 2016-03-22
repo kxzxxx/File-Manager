@@ -20,7 +20,8 @@
 <RelativeLayout android:orientation="vertical" android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:padding="2dp"
-    android:background="?android:attr/selectableItemBackground" xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="?android:attr/selectableItemBackground"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
 
     <CheckBox
@@ -46,7 +47,7 @@
     <TextView
         android:layout_marginTop="8.0dip"
         android:id="@+id/text1"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="?android:attr/textColorPrimary"
         android:textSize="16dip"

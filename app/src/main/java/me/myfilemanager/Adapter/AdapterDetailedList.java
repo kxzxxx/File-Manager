@@ -15,8 +15,6 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.apache.commons.io.FilenameUtils;
-
 import java.io.File;
 import java.util.LinkedList;
 
@@ -35,9 +33,14 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
     Context context;
     //list of file details
     LinkedList<FileDetail> fileDetails;
-  static  MainActivity mainActivity;
-   public static SparseBooleanArray mSelectedItemsIds;
-    public boolean stoppedAnimation = false;
+
+    //list of ref to viewHolder
+    LinkedList<ViewHolder> vHset = new LinkedList<>();
+
+
+    MainActivity mainActivity;
+    public SparseBooleanArray mSelectedItemsIds;
+
     Animation localAnimation;
     int anim;
     int offset = 100;
@@ -90,15 +93,17 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
 
     public void onBindViewHolder(final AdapterDetailedList.ViewHolder viewHolder, final int i) {
         setIcon(viewHolder, fileDetails.get(i));
-        viewHolder.checkBox.setVisibility(View.VISIBLE);
+
         Log.d("Get file name", fileDetails.get(i).getName());
         //setup checkbox
-        if (i==0)
+        if (i == 0)
             viewHolder.checkBox.setVisibility(View.INVISIBLE);
-        viewHolder.checkBox.setChecked(false);
+        else viewHolder.checkBox.setVisibility(View.VISIBLE);
 
         if (mSelectedItemsIds.get(i, false)) viewHolder.checkBox.setChecked(true);
-
+        else {
+            viewHolder.checkBox.setChecked(false);
+        }
 
         //setup row
         viewHolder.nameLabel.setText(fileDetails.get(i).getName());
@@ -106,71 +111,58 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
         viewHolder.dataLabel.setText(fileDetails.get(i).getDateModified());
 
         //setup checkboxlistener
-        if (!fileDetails.get(i).getName().equals("..")) {
-            viewHolder.checkBox.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    toggleChecked(i); //go actionmode
-                }
-            });
-            if(i!=0){
-            viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                public boolean onLongClick(View v) {
+        if (i == 0) {
+            viewHolder.itemView.setOnLongClickListener(null);
+            viewHolder.hasOnLongClickListener = false;
+        } else if (!viewHolder.checkboxHasOnClickListener
+                || !viewHolder.hasOnLongClickListener) {
+            viewHolder.bindListener(i);
+        }
+
+
+        //  if (!this.stoppedAnimation)   animate(viewHolder,i);
+
+
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            //load file list
+            public void onClick(View v) {
+                if (!mainActivity.actionMode) {
+                    String name = fileDetails.get(i).getName();
+                    if (i == 0) {
+
+                        if (mainActivity.currentFolder.equals("/")) {
+                            new UpdateList(mainActivity).execute(Environment.getExternalStorageDirectory().getAbsolutePath());
+                        } else {
+                            File tempFile = new File(mainActivity.currentFolder);
+                            if (tempFile.isFile()) {
+                                tempFile = tempFile.getParentFile()
+                                        .getParentFile();
+                            } else {
+                                tempFile = tempFile.getParentFile();
+                            }
+                            new UpdateList(mainActivity).execute(tempFile.getAbsolutePath());
+                        }
+
+                    } else if
+                            (name.equals(mainActivity.getString(R.string.home))) {
+                        new UpdateList(mainActivity).execute(Environment.getExternalStorageDirectory().getAbsolutePath());
+                        return;
+                    }
+
+                    final File selectedFile = new File(mainActivity.currentFolder, name);
+
+                    if (selectedFile.isDirectory()) {
+                        new UpdateList(mainActivity).execute(selectedFile.getAbsolutePath());
+                    }
+                } else if (i != 0) {
 
                     if (!mSelectedItemsIds.get(i, false)) viewHolder.checkBox.setChecked(true);
                     else viewHolder.checkBox.setChecked(false);
                     toggleChecked(i);
-                    return true;
                 }
+            }
 
-
-            });}
-
-        }
-        //  if (!this.stoppedAnimation)   animate(viewHolder,i);
-
-
-            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                //load file list
-                public void onClick(View v) {
-                   if(!mainActivity.actionMode) {
-                        String name = fileDetails.get(i).getName();
-                        if (i==0) {
-
-                            if (mainActivity.currentFolder.equals("/")) {
-                                new UpdateList(mainActivity).execute(Environment.getExternalStorageDirectory().getAbsolutePath());
-                            } else {
-                                File tempFile = new File(mainActivity.currentFolder);
-                                if (tempFile.isFile()) {
-                                    tempFile = tempFile.getParentFile()
-                                            .getParentFile();
-                                } else {
-                                    tempFile = tempFile.getParentFile();
-                                }
-                                new UpdateList(mainActivity).execute(tempFile.getAbsolutePath());
-                            }
-
-                        }
-                        else if
-                                (name.equals(mainActivity.getString(R.string.home))) {
-                            new UpdateList(mainActivity).execute(Environment.getExternalStorageDirectory().getAbsolutePath());
-                            return;
-                        }
-
-                        final File selectedFile = new File(mainActivity.currentFolder, name);
-
-                        if (selectedFile.isDirectory()) {
-                            new UpdateList(mainActivity).execute(selectedFile.getAbsolutePath());
-                        }
-                    }else   if(i!=0){
-
-                       if (!mSelectedItemsIds.get(i, false)) viewHolder.checkBox.setChecked(true);
-                       else viewHolder.checkBox.setChecked(false);
-                       toggleChecked(i);
-                   }
-                }
-
-            });
-
+        });
 
     }
 
@@ -182,17 +174,28 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
 
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(context).inflate(R.layout.item_file_list, viewGroup, false);
-        return new ViewHolder(v);
+        ViewHolder vH = new ViewHolder(v);
+        vHset.add(vH);
+        return vH;
     }
 
     void setIcon(final ViewHolder viewHolder, final FileDetail fileDetail) {
 
-      //  final String fileName = fileDetail.getName();
-    //    final String ext = FilenameUtils.getExtension(fileName);
+        //  final String fileName = fileDetail.getName();
+        //    final String ext = FilenameUtils.getExtension(fileName);
         if (fileDetail.isFolder()) {
             viewHolder.icon.setImageResource(R.drawable.folder);
         } else {
             viewHolder.icon.setImageResource(R.drawable.file);
+        }
+
+    }
+
+    public void toggleAllCheckbox() {
+
+        for (ViewHolder v : vHset) {
+            v.checkBox.setChecked(false);
+
         }
 
     }
@@ -202,12 +205,12 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
         if (mSelectedItemsIds.get(postion, false)) mSelectedItemsIds.put(postion, false);
         else mSelectedItemsIds.put(postion, true);
 
-if(postion!=0){
+
         //start actionmode
         if ((!mainActivity.actionMode || mainActivity.mActionMode == null)) {
             mainActivity.actionMode = true;
             mainActivity.mActionMode = mainActivity.ab.startActionMode(mainActivity.mActionModeCallback);
-        }}
+        }
         // mainActivity.mActionMode.invalidate();
 
         if (getCheckedItemPositions().size() == 0) {
@@ -231,7 +234,7 @@ if(postion!=0){
         return checkedItemPositions;
     }
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
+    protected class ViewHolder extends RecyclerView.ViewHolder {
 
 
         // Name of the file
@@ -247,6 +250,9 @@ if(postion!=0){
 
         public CheckBox checkBox;
 
+        public boolean hasOnClickListener = false;
+        public boolean hasOnLongClickListener = false;
+        public boolean checkboxHasOnClickListener = false;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -255,6 +261,32 @@ if(postion!=0){
             sizeLabel = (TextView) itemView.findViewById(R.id.text2);
             dataLabel = (TextView) itemView.findViewById(R.id.text3);
             icon = (ImageView) itemView.findViewById(R.id.icon);
+        }
+
+        public void bindListener(final int postion) {
+
+            this.checkBox.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    toggleChecked(postion); //go actionmode
+                }
+            });
+
+            this.checkboxHasOnClickListener = true;
+
+            this.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                public boolean onLongClick(View v) {
+
+                    if (!mSelectedItemsIds.get(postion, false)) checkBox.setChecked(true);
+                    else checkBox.setChecked(false);
+                    toggleChecked(postion);
+                    return true;
+                }
+
+            });
+
+            this.hasOnLongClickListener = true;
+
+
         }
     }
 
