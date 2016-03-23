@@ -92,6 +92,7 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
     }
 
     public void onBindViewHolder(final AdapterDetailedList.ViewHolder viewHolder, final int i) {
+
         setIcon(viewHolder, fileDetails.get(i));
 
         Log.d("Get file name", fileDetails.get(i).getName());
@@ -191,10 +192,10 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
 
     }
 
-    public void toggleAllCheckbox() {
+    public void toggleAllCheckbox(boolean sw) {
 
-        for (ViewHolder v : vHset) {
-            v.checkBox.setChecked(false);
+        for (ViewHolder v :vHset ) {
+            v.checkBox.setChecked(sw);
 
         }
 

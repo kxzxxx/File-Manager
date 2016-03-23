@@ -168,7 +168,7 @@ public static AdapterDetailedList adapter;
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
 
-            getWindow().setStatusBarColor(getResources().getColor(R.color.myactionModePrimaryDarkColor));
+            getWindow().setStatusBarColor(getResources().getColor(R.color.myactionModePrimaryDarkColor,null));
             return false; // Return false if nothing is done
         }
 
@@ -211,7 +211,7 @@ public static AdapterDetailedList adapter;
 
               adapter.mSelectedItemsIds.clear();
 
-adapter.toggleAllCheckbox();
+adapter.toggleAllCheckbox(false);
 
 
           }
