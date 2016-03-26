@@ -22,9 +22,7 @@ import me.myfilemanager.Activity.MainActivity;
 import me.myfilemanager.R;
 import me.myfilemanager.Utils.UpdateList;
 
-/**
- * Created by xz on 2015/9/22.
- */
+
 public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedList.ViewHolder> {
     //layout inflater
     //  final LayoutInflater inflater;
@@ -91,8 +89,8 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
 
     }
 
-    public void onBindViewHolder(final AdapterDetailedList.ViewHolder viewHolder, final int i) {
-
+    public void onBindViewHolder(final AdapterDetailedList.ViewHolder viewHolder, int position) {
+         final int i = viewHolder.getAdapterPosition();
         setIcon(viewHolder, fileDetails.get(i));
 
         Log.d("Get file name", fileDetails.get(i).getName());
@@ -222,13 +220,14 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
     }
 
     //some problem
-    public SparseBooleanArray getCheckedItemPositions() {
-        SparseBooleanArray checkedItemPositions = new SparseBooleanArray(0);
+    public LinkedList<Integer> getCheckedItemPositions() {
+
+        LinkedList<Integer> checkedItemPositions = new LinkedList<>();
 
         for (int i = 0; i < mSelectedItemsIds.size(); i++) {
 
             if (mSelectedItemsIds.valueAt(i)) {
-                checkedItemPositions.put(mSelectedItemsIds.keyAt(i), mSelectedItemsIds.valueAt(i));
+                checkedItemPositions.add(mSelectedItemsIds.keyAt(i));
             }
         }
 

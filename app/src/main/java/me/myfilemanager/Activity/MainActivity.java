@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -153,13 +154,14 @@ public static AdapterDetailedList adapter;
   }
 
     public ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-
+        SparseBooleanArray checkedItemPositions = new SparseBooleanArray(0);
         // Called when the action mode is created; startActionMode() was called
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             // Inflate a menu resource providing context menu items
 
             getMenuInflater().inflate(R.menu.filehandler, menu);
+
             return true;
         }
 
@@ -189,6 +191,8 @@ public static AdapterDetailedList adapter;
                     // TODO: 2016/3/21 file manager  put file path to a set
                     break;
                 case R.id.copyfile:
+
+                    checkedItemPositions =  adapter.getCheckedItemPositions();
 //adapter.mSelectedItemsIds.
                     Toast.makeText(getApplicationContext(), "copy file",
                             Toast.LENGTH_SHORT).show();
