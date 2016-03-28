@@ -116,26 +116,26 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
         } else if (!viewHolder.checkboxHasOnClickListener
                 || !viewHolder.hasOnLongClickListener) {
 
-   this.checkBox.setOnClickListener(new View.OnClickListener() {
+   viewHolder.checkBox.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    toggleChecked(postion); //go actionmode
+                    toggleChecked(i); //go actionmode
                 }
             });
 
-            this.checkboxHasOnClickListener = true;
+            viewHolder.checkboxHasOnClickListener = true;
 
-            this.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 public boolean onLongClick(View v) {
 
-                    if (!mSelectedItemsIds.get(postion, false)) checkBox.setChecked(true);
-                    else checkBox.setChecked(false);
-                    toggleChecked(postion);
+                    if (!mSelectedItemsIds.get(i, false)) viewHolder.checkBox.setChecked(true);
+                    else viewHolder.checkBox.setChecked(false);
+                    toggleChecked(i);
                     return true;
                 }
 
             });
 
-            this.hasOnLongClickListener = true;        }
+            viewHolder.hasOnLongClickListener = true;        }
 
 
         //  if (!this.stoppedAnimation)   animate(viewHolder,i);
@@ -283,12 +283,7 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
             icon = (ImageView) itemView.findViewById(R.id.icon);
         }
 
-        public void bindListener(final int postion) {
-
-
-
-
-        }
+     
     }
 
     public static class FileDetail {
