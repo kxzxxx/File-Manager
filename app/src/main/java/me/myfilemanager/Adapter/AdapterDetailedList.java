@@ -115,8 +115,27 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
             viewHolder.hasOnLongClickListener = false;
         } else if (!viewHolder.checkboxHasOnClickListener
                 || !viewHolder.hasOnLongClickListener) {
-            viewHolder.bindListener(i);
-        }
+
+   this.checkBox.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    toggleChecked(postion); //go actionmode
+                }
+            });
+
+            this.checkboxHasOnClickListener = true;
+
+            this.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                public boolean onLongClick(View v) {
+
+                    if (!mSelectedItemsIds.get(postion, false)) checkBox.setChecked(true);
+                    else checkBox.setChecked(false);
+                    toggleChecked(postion);
+                    return true;
+                }
+
+            });
+
+            this.hasOnLongClickListener = true;        }
 
 
         //  if (!this.stoppedAnimation)   animate(viewHolder,i);
@@ -212,6 +231,7 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
         }
         // mainActivity.mActionMode.invalidate();
 
+
         if (getCheckedItemPositions().size() == 0) {
             mainActivity.actionMode = false;
             mainActivity.mActionMode.finish();
@@ -265,26 +285,7 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
 
         public void bindListener(final int postion) {
 
-            this.checkBox.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    toggleChecked(postion); //go actionmode
-                }
-            });
 
-            this.checkboxHasOnClickListener = true;
-
-            this.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                public boolean onLongClick(View v) {
-
-                    if (!mSelectedItemsIds.get(postion, false)) checkBox.setChecked(true);
-                    else checkBox.setChecked(false);
-                    toggleChecked(postion);
-                    return true;
-                }
-
-            });
-
-            this.hasOnLongClickListener = true;
 
 
         }

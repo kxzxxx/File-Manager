@@ -194,7 +194,7 @@ public static AdapterDetailedList adapter;
                     for(int i:
                         adapter.getCheckedItemPositions()){
                         pathSet.add(adapter.fileDetails.get(i).getName());
-                        Log.d(TAG,pathSet.get(i));
+                        Log.d(TAG,pathSet.peekLast());
                     }
                     // TODO: 2016/3/21 file manager  put file path to a set
                     break;
@@ -206,13 +206,13 @@ public static AdapterDetailedList adapter;
                    for(int i:
                         adapter.getCheckedItemPositions()) {
                        pathSet.add(adapter.fileDetails.get(i).getName());
-                       Log.d(TAG,pathSet.get(i));
+                      Log.d(TAG,pathSet.peekLast());
                    }
                     break;
 
             }
 
-
+            MainActivity.this.mActionMode.finish();
                 return true;
 
         }
