@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '23.0.2'
+    buildToolsVersion '23.0.3'
     defaultConfig {
         applicationId 'me.myfilemanager'
         minSdkVersion 21
@@ -35,5 +35,5 @@ dependencies {
     compile 'com.android.support:multidex:+'
     compile 'jp.wasabeef:recyclerview-animators:+'
     compile 'com.jakewharton:butterknife:+'
-    compile(name:'rootfw-release', ext:'aar')
+    compile(name: 'rootfw-release', ext: 'aar')
 }

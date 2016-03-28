@@ -30,7 +30,7 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
 
     Context context;
     //list of file details
-    LinkedList<FileDetail> fileDetails;
+    public LinkedList<FileDetail> fileDetails;
 
     //list of ref to viewHolder
     LinkedList<ViewHolder> vHset = new LinkedList<>();

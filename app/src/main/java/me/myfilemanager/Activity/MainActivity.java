@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.io.File;
+import java.util.LinkedList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -154,7 +155,8 @@ public static AdapterDetailedList adapter;
   }
 
     public ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-        SparseBooleanArray checkedItemPositions = new SparseBooleanArray(0);
+
+        LinkedList<String> pathSet = new LinkedList<>();
         // Called when the action mode is created; startActionMode() was called
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -170,7 +172,7 @@ public static AdapterDetailedList adapter;
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
 
-            getWindow().setStatusBarColor(getResources().getColor(R.color.myactionModePrimaryDarkColor,null));
+            getWindow().setStatusBarColor(getResources().getColor(R.color.myactionModePrimaryDarkColor));
             return false; // Return false if nothing is done
         }
 
@@ -182,23 +184,31 @@ public static AdapterDetailedList adapter;
              /*   if (id == R.id.action_settings) {
                     Intent intent = new Intent(MainActivity.this, SettingActivity.class);
                     MainActivity.this.startActivity(intent);
-                    return true;
+                    return true
                 }*/
             switch (id){
                 case R.id.cutfile:
                     Toast.makeText(getApplicationContext(), "cut file",
                             Toast.LENGTH_SHORT).show();
+                    adapter.getCheckedItemPositions();
+                    for(int i:
+                        adapter.getCheckedItemPositions()){
+                        pathSet.add(adapter.fileDetails.get(i).getName());
+                        Log.d(TAG,pathSet.get(i));
+                    }
                     // TODO: 2016/3/21 file manager  put file path to a set
                     break;
-                case R.id.copyfile:
-
-                    checkedItemPositions =  adapter.getCheckedItemPositions();
-//adapter.mSelectedItemsIds.
+                case R.id
+                        .copyfile:
                     Toast.makeText(getApplicationContext(), "copy file",
                             Toast.LENGTH_SHORT).show();
                     // TODO: 2016/3/21 file manager  put file path to a set
+                   for(int i:
+                        adapter.getCheckedItemPositions()) {
+                       pathSet.add(adapter.fileDetails.get(i).getName());
+                       Log.d(TAG,pathSet.get(i));
+                   }
                     break;
-
 
             }
 
@@ -208,7 +218,6 @@ public static AdapterDetailedList adapter;
         }
 
         // Called when the user exits the action mode
-        @Override
         public void onDestroyActionMode(ActionMode mode) {
           if( adapter.getCheckedItemPositions().size()!=0){
 
