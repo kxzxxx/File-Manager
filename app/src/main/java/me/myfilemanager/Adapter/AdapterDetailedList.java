@@ -283,7 +283,7 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
             icon = (ImageView) itemView.findViewById(R.id.icon);
         }
 
-     
+
     }
 
     public static class FileDetail {

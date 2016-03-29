@@ -48,6 +48,7 @@ public static AdapterDetailedList adapter;
     public
    Toolbar ab;
 
+    LinkedList<String> pathSet = new LinkedList<>();
     public
     RecyclerView recyclerView;
 
@@ -118,6 +119,10 @@ public static AdapterDetailedList adapter;
 
             if (id == R.id.pastefile) {
                 // TODO: 2016/3/21 read file path that ready to move or copy
+                if(pathSet.size()!=0)
+                {
+
+                }
 
                 return true;
             }
@@ -156,7 +161,6 @@ public static AdapterDetailedList adapter;
 
     public ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
-        LinkedList<String> pathSet = new LinkedList<>();
         // Called when the action mode is created; startActionMode() was called
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
