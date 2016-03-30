@@ -47,6 +47,7 @@ public static AdapterDetailedList adapter;
     int mOldStatusBarColor;
     public
    Toolbar ab;
+    public static String sourceLocation;
 
     LinkedList<String> pathSet = new LinkedList<>();
     public
@@ -71,8 +72,10 @@ public static AdapterDetailedList adapter;
 
         //setup drawer
 
-        mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.fragment_drawer);
-        mNavigationDrawerFragment.setup(R.id.fragment_drawer, (CustomDrawer) findViewById(R.id.drawer), ab);
+        mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(
+                R.id.fragment_drawer);
+        mNavigationDrawerFragment.setup(R.id.fragment_drawer, (CustomDrawer) findViewById(R.id.drawer
+        ), ab);
 
 
         //setup recyclerView
@@ -119,9 +122,20 @@ public static AdapterDetailedList adapter;
 
             if (id == R.id.pastefile) {
                 // TODO: 2016/3/21 read file path that ready to move or copy
+                Log.d(TAG, "paste file"+Integer.toString(pathSet.size()));
+
                 if(pathSet.size()!=0)
                 {
-
+                for(String path:pathSet){
+                    File source =new File(sourceLocation+"/"+path);
+                    if(source.renameTo(new File(currentFolder+"/"+path)))
+                    {
+                        Log.d(TAG,"move to "+currentFolder+"successful");
+                    }
+                    else{
+                        Log.d(TAG, "Move file failed.");
+                    }
+                }
                 }
 
                 return true;
@@ -198,8 +212,9 @@ public static AdapterDetailedList adapter;
                     for(int i:
                         adapter.getCheckedItemPositions()){
                         pathSet.add(adapter.fileDetails.get(i).getName());
-                        Log.d(TAG,pathSet.peekLast());
+                        Log.d(TAG,"pathset"+pathSet.peekLast());
                     }
+                    sourceLocation =currentFolder;
                     // TODO: 2016/3/21 file manager  put file path to a set
                     break;
                 case R.id
@@ -210,8 +225,9 @@ public static AdapterDetailedList adapter;
                    for(int i:
                         adapter.getCheckedItemPositions()) {
                        pathSet.add(adapter.fileDetails.get(i).getName());
-                      Log.d(TAG,pathSet.peekLast());
+                      Log.d(TAG,"pathset"+pathSet.peekLast());
                    }
+                    sourceLocation =currentFolder;
                     break;
 
             }
