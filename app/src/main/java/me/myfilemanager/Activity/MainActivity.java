@@ -5,17 +5,16 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
@@ -23,12 +22,10 @@ import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 import java.io.File;
 import java.util.LinkedList;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import me.myfilemanager.Adapter.AdapterDetailedList;
+import me.myfilemanager.Callback.NavigationDrawerCallbacks;
 import me.myfilemanager.Custom.CustomDrawer;
 import me.myfilemanager.Fragment.NavigationDrawerFragment;
-import me.myfilemanager.Callback.NavigationDrawerCallbacks;
 import me.myfilemanager.R;
 import me.myfilemanager.Utils.UpdateList;
 
@@ -42,11 +39,11 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     public static String currentFolder;
     String TAG = MainActivity.class.getSimpleName();
     public ActionMode mActionMode;
-    public boolean actionMode=false;
-public static AdapterDetailedList adapter;
+    public boolean actionMode = false;
+    public static AdapterDetailedList adapter;
     int mOldStatusBarColor;
     public
-   Toolbar ab;
+    Toolbar ab;
     public static String sourceLocation;
 
     LinkedList<String> pathSet = new LinkedList<>();
@@ -54,27 +51,48 @@ public static AdapterDetailedList adapter;
     RecyclerView recyclerView;
 
     NavigationDrawerFragment mNavigationDrawerFragment;
-
+    static Handler uihandler;
 
 
     protected void onCreate(Bundle savedInstanceState) {
         currentFolder = Environment.getExternalStorageDirectory().getAbsolutePath();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-         mOldStatusBarColor = getWindow().getStatusBarColor();
+        mOldStatusBarColor = getWindow().getStatusBarColor();
 
-        ab=(Toolbar) findViewById(R.id.toolbar_actionbar);
-        recyclerView=( RecyclerView)findViewById(R.id.list);
+
+        uihandler = new Handler() {
+
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                switch (msg.arg1) {
+
+                    case (1):
+                        Toast.makeText(getApplicationContext(), "move file successful",
+                                Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+
+                        Toast.makeText(getApplicationContext(), Integer.toString(msg.arg1),
+                                Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+
+        ab = (Toolbar) findViewById(R.id.toolbar_actionbar);
+        recyclerView = (RecyclerView) findViewById(R.id.list);
         //setup toolbar
         setSupportActionBar(ab);
         ab.setOnMenuItemClickListener(onMenuItemClick);
-        Log.d(TAG,"load====");
+        Log.d(TAG, "load====");
 
         //setup drawer
 
-        mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(
-                R.id.fragment_drawer);
-        mNavigationDrawerFragment.setup(R.id.fragment_drawer, (CustomDrawer) findViewById(R.id.drawer
+        mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager()
+                .findFragmentById(
+                        R.id.fragment_drawer);
+        mNavigationDrawerFragment.setup(R.id.fragment_drawer, (CustomDrawer) findViewById(R.id
+                .drawer
         ), ab);
 
 
@@ -89,19 +107,19 @@ public static AdapterDetailedList adapter;
                         .sizeResId(R.dimen.divider)
                         .marginResId(R.dimen.leftmargin, R.dimen.rightmargin)
                         .build());
-       // recyclerView.setAdapter(mAdapter);
+        // recyclerView.setAdapter(mAdapter);
 
-     //   new UpdateList(this).execute(currentFolder);
+        //   new UpdateList(this).execute(currentFolder);
 
         //  recyclerView.setTextFilterEnabled(true);
 
         //获取主储存路径
 
-    //    String homePath = Environment.getExternalStorageDirectory().getAbsolutePath();
-      //  File file = new File(homePath);
+        //    String homePath = Environment.getExternalStorageDirectory().getAbsolutePath();
+        //  File file = new File(homePath);
 
 
-	this.onNavigationDrawerItemSelected(0);
+        this.onNavigationDrawerItemSelected(0);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -109,7 +127,7 @@ public static AdapterDetailedList adapter;
         return super.onCreateOptionsMenu(menu);
     }
 
-   Toolbar.OnMenuItemClickListener onMenuItemClick = new Toolbar.OnMenuItemClickListener() {
+    Toolbar.OnMenuItemClickListener onMenuItemClick = new Toolbar.OnMenuItemClickListener() {
 
         public boolean onMenuItemClick(MenuItem item) {
             int id = item.getItemId();
@@ -121,22 +139,40 @@ public static AdapterDetailedList adapter;
             }
 
             if (id == R.id.pastefile) {
-                // TODO: 2016/3/21 read file path that ready to move or copy
-                Log.d(TAG, "paste file"+Integer.toString(pathSet.size()));
+                //TODO:add a dialog
+                Log.d(TAG, "paste file" + Integer.toString(pathSet.size()));
 
-                if(pathSet.size()!=0)
-                {
-                for(String path:pathSet){
-                    File source =new File(sourceLocation+"/"+path);
-                    if(source.renameTo(new File(currentFolder+"/"+path)))
-                    {
-                        Log.d(TAG,"move to "+currentFolder+"successful");
-                    }
-                    else{
-                        Log.d(TAG, "Move file failed.");
-                    }
+                if (pathSet.size() != 0) {
+                    new Thread(new Runnable() {
+
+                        Message err = uihandler.obtainMessage();
+                        public void run() {
+                            for (String path : pathSet) {
+                                File source = new File(sourceLocation + "/" + path);
+                                File dest = new File(currentFolder + "/" + path);
+                                //check if file is exist
+                                if (!dest.exists()) {
+                                    if (source.renameTo(dest))
+
+                                    {
+                                        Log.d(TAG, "move successful");
+                                    } else {
+                                        Log.d(TAG, "Move file failed.");
+                                    }
+
+                                }
+                            }
+                            err.arg1 = 1;
+                            err.sendToTarget();
+                        }
+
+                    }).start();
+                } else {
+                    //open a dialog
                 }
-                }
+                Toast.makeText(getApplicationContext(), "move file successful",
+                        Toast.LENGTH_SHORT).show();
+                adapter.notifyDataSetChanged();
 
                 return true;
             }
@@ -168,10 +204,10 @@ public static AdapterDetailedList adapter;
 
     }
 
-  public void onStop(){
-      super.onStop();
-      NavigationDrawerFragment.readSharedSetting(this,"currentFolder",currentFolder);
-  }
+    public void onStop() {
+        super.onStop();
+        NavigationDrawerFragment.readSharedSetting(this, "currentFolder", currentFolder);
+    }
 
     public ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
@@ -190,31 +226,32 @@ public static AdapterDetailedList adapter;
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
 
-            getWindow().setStatusBarColor(getResources().getColor(R.color.myactionModePrimaryDarkColor));
+            getWindow().setStatusBarColor(getResources().getColor(R.color
+                    .myactionModePrimaryDarkColor));
             return false; // Return false if nothing is done
         }
 
         // Called when the user selects a contextual menu item
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                int id = item.getItemId();
-                //noinspection SimplifiableIfStatement
+            int id = item.getItemId();
+            //noinspection SimplifiableIfStatement
              /*   if (id == R.id.action_settings) {
                     Intent intent = new Intent(MainActivity.this, SettingActivity.class);
                     MainActivity.this.startActivity(intent);
                     return true
                 }*/
-            switch (id){
+            switch (id) {
                 case R.id.cutfile:
                     Toast.makeText(getApplicationContext(), "cut file",
                             Toast.LENGTH_SHORT).show();
                     adapter.getCheckedItemPositions();
-                    for(int i:
-                        adapter.getCheckedItemPositions()){
+                    for (int i :
+                            adapter.getCheckedItemPositions()) {
                         pathSet.add(adapter.fileDetails.get(i).getName());
-                        Log.d(TAG,"pathset"+pathSet.peekLast());
+                        Log.d(TAG, "pathset" + pathSet.peekLast());
                     }
-                    sourceLocation =currentFolder;
+                    sourceLocation = currentFolder;
                     // TODO: 2016/3/21 file manager  put file path to a set
                     break;
                 case R.id
@@ -222,32 +259,32 @@ public static AdapterDetailedList adapter;
                     Toast.makeText(getApplicationContext(), "copy file",
                             Toast.LENGTH_SHORT).show();
                     // TODO: 2016/3/21 file manager  put file path to a set
-                   for(int i:
-                        adapter.getCheckedItemPositions()) {
-                       pathSet.add(adapter.fileDetails.get(i).getName());
-                      Log.d(TAG,"pathset"+pathSet.peekLast());
-                   }
-                    sourceLocation =currentFolder;
+                    for (int i :
+                            adapter.getCheckedItemPositions()) {
+                        pathSet.add(adapter.fileDetails.get(i).getName());
+                        Log.d(TAG, "pathset" + pathSet.peekLast());
+                    }
+                    sourceLocation = currentFolder;
                     break;
 
             }
 
             MainActivity.this.mActionMode.finish();
-                return true;
+            return true;
 
         }
 
         // Called when the user exits the action mode
         public void onDestroyActionMode(ActionMode mode) {
-          if( adapter.getCheckedItemPositions().size()!=0){
+            if (adapter.getCheckedItemPositions().size() != 0) {
 
 
-              adapter.mSelectedItemsIds.clear();
+                adapter.mSelectedItemsIds.clear();
 
-adapter.toggleAllCheckbox(false);
+                adapter.toggleAllCheckbox(false);
 
 
-          }
+            }
             getWindow().setStatusBarColor(mOldStatusBarColor);
             actionMode = false;
             mActionMode = null;
@@ -255,7 +292,6 @@ adapter.toggleAllCheckbox(false);
     };
 
     public void onNavigationDrawerItemSelected(int itemPosition) {
-
 
 
         new UpdateList(this).execute(mNavigationDrawerFragment.adapter.getList().get(itemPosition).getText());

@@ -44,6 +44,7 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
     int offset = 100;
     // Allows to remember the last item shown on screen
     int lastPosition = -1;
+    boolean stoppedAnimation;
 
     public AdapterDetailedList(final MainActivity mainActivity,
                                final LinkedList<FileDetail> fileDetails,
@@ -138,7 +139,7 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
             viewHolder.hasOnLongClickListener = true;        }
 
 
-        //  if (!this.stoppedAnimation)   animate(viewHolder,i);
+          if (!this.stoppedAnimation)   animate(viewHolder,i);
 
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {

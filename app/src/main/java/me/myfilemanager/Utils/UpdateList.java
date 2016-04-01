@@ -27,7 +27,7 @@ import me.myfilemanager.R;
 public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetailedList.FileDetail>> {
 
     String exceptionMessage;
-  static   MainActivity activity;
+  MainActivity activity;
 
 
     public UpdateList(MainActivity activity) {
@@ -63,7 +63,7 @@ public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetail
 
             final LinkedList<AdapterDetailedList.FileDetail> fileDetails = new LinkedList<>();
             final LinkedList<AdapterDetailedList.FileDetail> folderDetails = new LinkedList<>();
-            activity.currentFolder = tempFolder.getAbsolutePath();
+            MainActivity.currentFolder = tempFolder.getAbsolutePath();
 
             if (!tempFolder.canRead()) {
                 this.cancel(true);
@@ -136,9 +136,9 @@ public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetail
     protected void onPostExecute(final LinkedList<AdapterDetailedList.FileDetail> names) {
         super.onPostExecute(names);
         if (names != null) {
-            boolean isRoot = activity.currentFolder.equals("/");
-            activity.adapter = new AdapterDetailedList(activity, names, isRoot);
-            activity.recyclerView.setAdapter(activity.adapter);
+            boolean isRoot = MainActivity.currentFolder.equals("/");
+            MainActivity.adapter = new AdapterDetailedList(activity, names, isRoot);
+            activity.recyclerView.setAdapter(MainActivity.adapter);
         }
         if (exceptionMessage != null) {
             Toast.makeText(activity, exceptionMessage, Toast.LENGTH_SHORT).show();
@@ -148,6 +148,6 @@ public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetail
     }
 
     public final Comparator<File> getFileNameComparator() {
-        return new AlphanumComparator();
+        return  new AlphanumComparator();
     }
 }
