@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.LinkedList;
 
 import me.myfilemanager.Adapter.AdapterDetailedList;
@@ -51,8 +52,33 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     RecyclerView recyclerView;
 
     NavigationDrawerFragment mNavigationDrawerFragment;
-    static Handler uihandler;
 
+    static class MainActivityHandler extends Handler {
+        final WeakReference<MainActivity> mTarget;
+
+        MainActivityHandler(MainActivity target) {
+            mTarget = new WeakReference<>(target);
+        }
+
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+
+                case (1):
+                    Toast.makeText(mTarget.get().getApplicationContext(), "move file " +
+                                    "successful",
+                            Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+
+                    Toast.makeText(mTarget.get().getApplicationContext(), Integer.toString(msg
+                            .arg1),
+                            Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    MainActivityHandler uiHandler = new MainActivityHandler(this);
 
     protected void onCreate(Bundle savedInstanceState) {
         currentFolder = Environment.getExternalStorageDirectory().getAbsolutePath();
@@ -60,24 +86,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         setContentView(R.layout.activity_main);
         mOldStatusBarColor = getWindow().getStatusBarColor();
 
-
-        uihandler = new Handler() {
-
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                switch (msg.arg1) {
-
-                    case (1):
-                        Toast.makeText(getApplicationContext(), "move file successful",
-                                Toast.LENGTH_SHORT).show();
-                        break;
-                    default:
-
-                        Toast.makeText(getApplicationContext(), Integer.toString(msg.arg1),
-                                Toast.LENGTH_SHORT).show();
-                }
-            }
-        };
 
         ab = (Toolbar) findViewById(R.id.toolbar_actionbar);
         recyclerView = (RecyclerView) findViewById(R.id.list);
@@ -145,7 +153,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 if (pathSet.size() != 0) {
                     new Thread(new Runnable() {
 
-                        Message err = uihandler.obtainMessage();
                         public void run() {
                             for (String path : pathSet) {
                                 File source = new File(sourceLocation + "/" + path);
@@ -162,8 +169,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
 
                                 }
                             }
-                            err.arg1 = 1;
-                            err.sendToTarget();
+                            uiHandler.sendEmptyMessage(1);
                         }
 
                     }).start();
@@ -294,7 +300,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     public void onNavigationDrawerItemSelected(int itemPosition) {
 
 
-        new UpdateList(this).execute(mNavigationDrawerFragment.adapter.getList().get(itemPosition).getText());
+        new UpdateList(this).execute(mNavigationDrawerFragment.adapter.getList().get
+                (itemPosition).getText());
 
 
     }
