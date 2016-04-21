@@ -86,4 +86,9 @@
     <string name="file_cannot_be_renamed">The file cannot be renamed</string>
     <string name="use_storage_access_framework">Use the "Storage Access Framework"</string>
 
+    <string name="cut_file_dialog_title">File already exists</string>
+    <string name="cut_file_dialog_content">Would you like to overwrite it?</string>
+    <string name="cut_file_dialog_agree">Yes</string>
+    <string name="cut_file_dialog_disagree">Cancle</string>
+
 </resources>

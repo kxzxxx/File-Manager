@@ -36,4 +36,7 @@ dependencies {
     compile 'jp.wasabeef:recyclerview-animators:+'
     compile 'com.jakewharton:butterknife:+'
     compile(name: 'rootfw-release', ext: 'aar')
+    compile('com.github.afollestad.material-dialogs:core:0.8.5.8@aar') {
+        transitive = true
+    }
 }

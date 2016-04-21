@@ -35,23 +35,33 @@
             <id />
           </State>
           <State>
-            <id>Android</id>
+            <id>Android &gt; Lint &gt; Correctness</id>
           </State>
           <State>
-            <id>Android &gt; Lint &gt; Correctness</id>
+            <id>Android &gt; Lint &gt; Performance</id>
+          </State>
+          <State>
+            <id>Android &gt; Lint &gt; Security</id>
+          </State>
+          <State>
+            <id>Error handlingJava</id>
           </State>
           <State>
             <id>Java</id>
           </State>
           <State>
+            <id>Java language level issuesJava</id>
+          </State>
+          <State>
             <id>Java language level migration aidsJava</id>
           </State>
-        </expanded-state>
-        <selected-state>
           <State>
-            <id>Android</id>
+            <id>Probable bugsJava</id>
           </State>
-        </selected-state>
+          <State>
+            <id>Resource management issuesJava</id>
+          </State>
+        </expanded-state>
       </profile-state>
     </entry>
   </component>

@@ -6,7 +6,9 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +19,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.io.File;
@@ -50,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     LinkedList<String> pathSet = new LinkedList<>();
     public
     RecyclerView recyclerView;
+    public Handler chHandler;
 
     NavigationDrawerFragment mNavigationDrawerFragment;
 
@@ -63,6 +68,29 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
+                case 111: {
+                    MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(mTarget.get()
+                            .getApplicationContext()).onAny(new MaterialDialog
+                            .SingleButtonCallback() {
+
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction
+                                which) {
+                            if (which == DialogAction.POSITIVE) {
+                                mTarget.get().chHandler.sendEmptyMessage(1);
+                            }
+                        }
+                    })
+                            .title(R.string.cut_file_dialog_title)
+                            .content(R.string.cut_file_dialog_content)
+                            .positiveText(R.string.cut_file_dialog_agree)
+                            .negativeText(R.string.cut_file_dialog_disagree);
+
+                    MaterialDialog dialog = dialogBuilder.build();
+                    dialog.show();
+
+                    break;
+                }
 
                 case (1):
                     Toast.makeText(mTarget.get().getApplicationContext(), "move file " +
@@ -72,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                 default:
 
                     Toast.makeText(mTarget.get().getApplicationContext(), Integer.toString(msg
-                            .arg1),
+                                    .arg1),
                             Toast.LENGTH_SHORT).show();
             }
         }
@@ -115,19 +143,10 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                         .sizeResId(R.dimen.divider)
                         .marginResId(R.dimen.leftmargin, R.dimen.rightmargin)
                         .build());
-        // recyclerView.setAdapter(mAdapter);
-
-        //   new UpdateList(this).execute(currentFolder);
-
-        //  recyclerView.setTextFilterEnabled(true);
-
-        //获取主储存路径
-
-        //    String homePath = Environment.getExternalStorageDirectory().getAbsolutePath();
-        //  File file = new File(homePath);
-
-
-        this.onNavigationDrawerItemSelected(0);
+        // recyclerView.setAdapter(mAdapter); //   new UpdateList(this).execute(currentFolder);
+        //  recyclerView.setTextFilterEnabled(true); //获取主储存路径 //    String homePath =
+        // Environment.getExternalStorageDirectory().getAbsolutePath(); //  File file = new File
+        // (homePath); this.onNavigationDrawerItemSelected(0);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -147,13 +166,25 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             }
 
             if (id == R.id.pastefile) {
-                //TODO:add a dialog
+                //TODO:add a dialog , notify
                 Log.d(TAG, "paste file" + Integer.toString(pathSet.size()));
 
                 if (pathSet.size() != 0) {
                     new Thread(new Runnable() {
 
                         public void run() {
+                            LinkedList<String> overpath = new LinkedList<>();
+                            Looper.prepare();
+                            chHandler = new Handler() {
+                                public void handleMessage(Message msg) {
+                                    // process incoming messages here
+                                    if (msg.what ==1){
+                                File source=new File(  overpath.getFirst()
+                                    }
+                                }
+                            };
+
+                            Looper.loop();
                             for (String path : pathSet) {
                                 File source = new File(sourceLocation + "/" + path);
                                 File dest = new File(currentFolder + "/" + path);
@@ -167,12 +198,24 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                                         Log.d(TAG, "Move file failed.");
                                     }
 
+                                } else {
+                                    //if file exists , then add to a new ;
+                                    overpath.add(dest.getName());
+                                    //open a dialog
+
+
                                 }
                             }
-                            uiHandler.sendEmptyMessage(1);
+                            if(overpath.size()!=0)
+                                uiHandler.sendEmptyMessage(111);
+
+else{uiHandler.sendEmptyMessage(1);}
+
+
                         }
 
-                    }).start();
+                    })
+                            .start();
                 } else {
                     //open a dialog
                 }
