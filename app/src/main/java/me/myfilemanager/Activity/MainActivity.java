@@ -131,7 +131,9 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         // recyclerView.setAdapter(mAdapter); //   new UpdateList(this).execute(currentFolder);
         //  recyclerView.setTextFilterEnabled(true); //获取主储存路径 //    String homePath =
         // Environment.getExternalStorageDirectory().getAbsolutePath(); //  File file = new File
-        // (homePath); this.onNavigationDrawerItemSelected(0);
+        // (homePath);
+        
+        this.onNavigationDrawerItemSelected(0);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
