@@ -1,12 +1,8 @@
 package me.myfilemanager.Utils;
 
 import android.os.AsyncTask;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
-
-import com.spazedog.lib.rootfw4.RootFW;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -24,22 +20,20 @@ import me.myfilemanager.R;
 /**
  * Created by vV on 2015/9/30.
  */
-public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetailedList.FileDetail>> {
+public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetailedList
+        .FileDetail>> {
 
     String exceptionMessage;
-  MainActivity activity;
+    MainActivity activity;
 
 
     public UpdateList(MainActivity activity) {
         super();
         this.activity = activity;
-    }
 
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
 
     }
+
 
     /**
      * {@inheritDoc}
@@ -73,23 +67,28 @@ public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetail
 
 
                 /*if (RootFW.connect()) {
-                    com.spazedog.lib.rootfw4.utils.File folder = RootFW.getFile(activity.currentFolder);
+                    com.spazedog.lib.rootfw4.utils.File folder = RootFW.getFile(activity
+                    .currentFolder);
                     com.spazedog.lib.rootfw4.utils.File.FileStat[] stats = folder.getDetailedList();
 
                     if (stats != null) {
                         for (com.spazedog.lib.rootfw4.utils.File.FileStat stat : stats) {
                             *//**
-                             * @return
-                             *     The file type ('d'=>Directory, 'f'=>File, 'b'=>Block Device, 'c'=>Character Device, 'l'=>Symbolic Link)
-                             *//*
+                 * @return
+                 *     The file type ('d'=>Directory, 'f'=>File, 'b'=>Block Device,
+                 *     'c'=>Character Device, 'l'=>Symbolic Link)
+                 *//*
                             if (stat.type().equals("d")) {
                                 folderDetails.add(new AdapterDetailedList.FileDetail(stat.name(),
                                         activity.getString(R.string.folder),
                                         ""));
-                            } else if (!FilenameUtils.isExtension(stat.name().toLowerCase(), unopenableExtensions)
-                                    && stat.size() <= 20_000 * FileUtils.ONE_KB) {// Java 7 新增数值中使用下划线分割
+                            } else if (!FilenameUtils.isExtension(stat.name().toLowerCase(),
+                            unopenableExtensions)
+                                    && stat.size() <= 20_000 * FileUtils.ONE_KB) {// Java 7
+                                    新增数值中使用下划线分割
                                 final long fileSize = stat.size();
-                                //SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy  hh:mm a");
+                                //SimpleDateFormat format = new SimpleDateFormat("MMM dd, yyyy
+                                hh:mm a");
                                 //String date = format.format("");
                                 fileDetails.add(new AdapterDetailedList.FileDetail(stat.name(),
                                         FileUtils.byteCountToDisplaySize(fileSize), ""));
@@ -109,7 +108,8 @@ public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetail
                                 activity.getString(R.string.folder),
                                 ""));
                     } else if (f.isFile()
-                            && !FilenameUtils.isExtension(f.getName().toLowerCase(), unopenableExtensions)
+                            && !FilenameUtils.isExtension(f.getName().toLowerCase(),
+                            unopenableExtensions)
                             && FileUtils.sizeOf(f) <= 20_000 * FileUtils.ONE_KB) {
                         final long fileSize = f.length();
                         SimpleDateFormat format = new SimpleDateFormat();
@@ -122,6 +122,22 @@ public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetail
             }
 
             folderDetails.addAll(fileDetails);
+
+  MainActivity.adapter.fileDetails.clear();
+            MainActivity.adapter.fileDetails.addAll(folderDetails);
+
+            if (!MainActivity.currentFolder.equals("/")) {
+                MainActivity.adapter.fileDetails.addFirst(new AdapterDetailedList.FileDetail
+                        ("..", activity
+                        .getString(R
+                                .string
+                                .parent_dir)
+                        , ""));
+            } else {
+                MainActivity.adapter.fileDetails.addFirst(new AdapterDetailedList
+                        .FileDetail(activity.getString(R.string.home), activity
+                        .getString(R.string.folder), ""));
+            }
             return folderDetails;
         } catch (Exception e) {
             exceptionMessage = e.getMessage();
@@ -136,18 +152,15 @@ public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetail
     protected void onPostExecute(final LinkedList<AdapterDetailedList.FileDetail> names) {
         super.onPostExecute(names);
         if (names != null) {
-            boolean isRoot = MainActivity.currentFolder.equals("/");
-            MainActivity.adapter = new AdapterDetailedList(activity, names, isRoot);
-            activity.recyclerView.setAdapter(MainActivity.adapter);
+            MainActivity.adapter.notifyDataSetChanged();
         }
         if (exceptionMessage != null) {
             Toast.makeText(activity, exceptionMessage, Toast.LENGTH_SHORT).show();
         }
         activity.invalidateOptionsMenu();
-        super.onPostExecute(names);
     }
 
     public final Comparator<File> getFileNameComparator() {
-        return  new AlphanumComparator();
+        return new AlphanumComparator();
     }
 }

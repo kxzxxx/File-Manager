@@ -115,9 +115,10 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         ), ab);
 
 
+        adapter=new AdapterDetailedList(this,new LinkedList<AdapterDetailedList.FileDetail>());
         //setup recyclerView
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setAdapter(null);
+        recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(
@@ -126,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                         .sizeResId(R.dimen.divider)
                         .marginResId(R.dimen.leftmargin, R.dimen.rightmargin)
                         .build());
+
         // recyclerView.setAdapter(mAdapter); //   new UpdateList(this).execute(currentFolder);
         //  recyclerView.setTextFilterEnabled(true); //获取主储存路径 //    String homePath =
         // Environment.getExternalStorageDirectory().getAbsolutePath(); //  File file = new File

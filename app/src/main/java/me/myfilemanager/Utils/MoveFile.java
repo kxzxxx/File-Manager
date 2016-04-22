@@ -9,7 +9,6 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -19,8 +18,7 @@ import me.myfilemanager.R;
 public class MoveFile extends AsyncTask<String[], Void, LinkedList<String>> {
     MainActivity mainA;
     String sourceLocation;
-    String currentFolder;
-    LinkedList<String> overPath=new LinkedList<>();
+    LinkedList<String> overPath = new LinkedList<>();
 
     public MoveFile(MainActivity mainActivity) {
         this.mainA = mainActivity;
@@ -31,7 +29,7 @@ public class MoveFile extends AsyncTask<String[], Void, LinkedList<String>> {
 
     protected LinkedList<String> doInBackground(String[]... param) {
 
-        LinkedList<String> pathSet =new LinkedList<>( Arrays.asList(param[0]));
+        LinkedList<String> pathSet = new LinkedList<>(Arrays.asList(param[0]));
 
         if (pathSet.size() != 0) {
 
@@ -44,8 +42,8 @@ public class MoveFile extends AsyncTask<String[], Void, LinkedList<String>> {
                     if (source.renameTo(dest))
 
                     {
-                        Log.d("Move File AsyncTask", "Successful move to "+MainActivity
-                                .currentFolder+"/"+path );
+                        Log.d("Move File AsyncTask", "Successful move to " + MainActivity
+                                .currentFolder + "/" + path);
                     } else {
                         Log.d("Move File AsyncTask", "Move file failed.");
                     }
@@ -68,11 +66,12 @@ public class MoveFile extends AsyncTask<String[], Void, LinkedList<String>> {
 
     protected void onPostExecute(LinkedList<String> overPath) {
         super.onPostExecute(overPath);
+        new UpdateList(mainA).execute(MainActivity.currentFolder);
         if (overPath.size() != 0) showDialog();
         Toast.makeText(mainA.getApplicationContext(), "move file successful",
                 Toast.LENGTH_SHORT).show();
 
-        new UpdateList(mainA).execute(currentFolder);
+
     }
 
     public void showDialog() {

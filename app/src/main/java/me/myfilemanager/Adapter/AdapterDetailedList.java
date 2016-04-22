@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,27 +41,19 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
 
     Animation localAnimation;
     int anim;
-    int offset = 100;
     // Allows to remember the last item shown on screen
     int lastPosition = -1;
-    boolean stoppedAnimation;
 
     public AdapterDetailedList(final MainActivity mainActivity,
-                               final LinkedList<FileDetail> fileDetails,
-                               final boolean isRoot) {
+                               final LinkedList<FileDetail> fileDetails
+                               )                        {
         this.fileDetails = fileDetails;
         this.mainActivity = mainActivity;
         this.orig = fileDetails;
         this.context = mainActivity;
         mSelectedItemsIds = new SparseBooleanArray(); //save checkbox status
 
-        if (!isRoot) {
-            this.fileDetails.addFirst(new FileDetail("..", context.getString(R.string.parent_dir)
-                    , ""));
-        } else {
-            this.fileDetails.addFirst(new FileDetail(context.getString(R.string.home), context
-                    .getString(R.string.folder), ""));
-        }
+
 
 
         anim = /*main.IS_LIST?R.anim.fade_in_top:*/R.anim.fade;
@@ -78,15 +71,14 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
         return super.onFailedToRecycleView(holder);
     }
 
-    void animate(AdapterDetailedList.ViewHolder holder, int position) {
+    void animate(AdapterDetailedList.ViewHolder holder, int position,int offset) {
         if (position > lastPosition) {
             holder.itemView.clearAnimation();
             localAnimation = AnimationUtils.loadAnimation(context, anim);
-            localAnimation.setStartOffset(this.offset);
+            localAnimation.setStartOffset(offset);
             holder.itemView.startAnimation(localAnimation);
             lastPosition = position;
 
-            // this.offset+=30;
         }
 
     }
@@ -139,8 +131,7 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
             viewHolder.hasOnLongClickListener = true;
         }
 
-
-        if (!this.stoppedAnimation) animate(viewHolder, i);
+ animate(viewHolder, position,100);
 
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
