@@ -32,16 +32,16 @@ import me.myfilemanager.Callback.NavigationDrawerCallbacks;
 import me.myfilemanager.Custom.CustomDrawer;
 import me.myfilemanager.Fragment.NavigationDrawerFragment;
 import me.myfilemanager.R;
+import me.myfilemanager.Utils.MoveFile;
 import me.myfilemanager.Utils.UpdateList;
 
 
 //TODO next animation
 //TODO save current folder
-//TODO checkbox animation
-// TODO: 2015/12/6 file handler  
+// TODO: 2015/12/6 file handler
 
 public class MainActivity extends AppCompatActivity implements NavigationDrawerCallbacks {
-    public static String currentFolder;
+    public String currentFolder;
     String TAG = MainActivity.class.getSimpleName();
     public ActionMode mActionMode;
     public boolean actionMode = false;
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     int mOldStatusBarColor;
     public
     Toolbar ab;
-    public static String sourceLocation;
+    public String sourceLocation;
 
     LinkedList<String> pathSet = new LinkedList<>();
     public
@@ -69,25 +69,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             super.handleMessage(msg);
             switch (msg.what) {
                 case 111: {
-                    MaterialDialog.Builder dialogBuilder = new MaterialDialog.Builder(mTarget.get()
-                            .getApplicationContext()).onAny(new MaterialDialog
-                            .SingleButtonCallback() {
 
-                        @Override
-                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction
-                                which) {
-                            if (which == DialogAction.POSITIVE) {
-                                mTarget.get().chHandler.sendEmptyMessage(1);
-                            }
-                        }
-                    })
-                            .title(R.string.cut_file_dialog_title)
-                            .content(R.string.cut_file_dialog_content)
-                            .positiveText(R.string.cut_file_dialog_agree)
-                            .negativeText(R.string.cut_file_dialog_disagree);
 
-                    MaterialDialog dialog = dialogBuilder.build();
-                    dialog.show();
 
                     break;
                 }
@@ -168,59 +151,9 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
             if (id == R.id.pastefile) {
                 //TODO:add a dialog , notify
                 Log.d(TAG, "paste file" + Integer.toString(pathSet.size()));
-
-                if (pathSet.size() != 0) {
-                    new Thread(new Runnable() {
-
-                        public void run() {
-                            LinkedList<String> overpath = new LinkedList<>();
-                            Looper.prepare();
-                            chHandler = new Handler() {
-                                public void handleMessage(Message msg) {
-                                    // process incoming messages here
-                                    if (msg.what ==1){
-                                File source=new File(  overpath.getFirst()
-                                    }
-                                }
-                            };
-
-                            Looper.loop();
-                            for (String path : pathSet) {
-                                File source = new File(sourceLocation + "/" + path);
-                                File dest = new File(currentFolder + "/" + path);
-                                //check if file is exist
-                                if (!dest.exists()) {
-                                    if (source.renameTo(dest))
-
-                                    {
-                                        Log.d(TAG, "move successful");
-                                    } else {
-                                        Log.d(TAG, "Move file failed.");
-                                    }
-
-                                } else {
-                                    //if file exists , then add to a new ;
-                                    overpath.add(dest.getName());
-                                    //open a dialog
+                new MoveFile(MainActivity.this).execute(pathSet);
 
 
-                                }
-                            }
-                            if(overpath.size()!=0)
-                                uiHandler.sendEmptyMessage(111);
-
-else{uiHandler.sendEmptyMessage(1);}
-
-
-                        }
-
-                    })
-                            .start();
-                } else {
-                    //open a dialog
-                }
-                Toast.makeText(getApplicationContext(), "move file successful",
-                        Toast.LENGTH_SHORT).show();
                 adapter.notifyDataSetChanged();
 
                 return true;
