@@ -123,21 +123,7 @@ public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetail
 
             folderDetails.addAll(fileDetails);
 
-  MainActivity.adapter.fileDetails.clear();
-            MainActivity.adapter.fileDetails.addAll(folderDetails);
 
-            if (!MainActivity.currentFolder.equals("/")) {
-                MainActivity.adapter.fileDetails.addFirst(new AdapterDetailedList.FileDetail
-                        ("..", activity
-                        .getString(R
-                                .string
-                                .parent_dir)
-                        , ""));
-            } else {
-                MainActivity.adapter.fileDetails.addFirst(new AdapterDetailedList
-                        .FileDetail(activity.getString(R.string.home), activity
-                        .getString(R.string.folder), ""));
-            }
             return folderDetails;
         } catch (Exception e) {
             exceptionMessage = e.getMessage();
@@ -152,7 +138,23 @@ public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetail
     protected void onPostExecute(final LinkedList<AdapterDetailedList.FileDetail> names) {
         super.onPostExecute(names);
         if (names != null) {
-            MainActivity.adapter.notifyDataSetChanged();
+
+            MainActivity.adapter = new AdapterDetailedList(activity, names);
+            activity.recyclerView.setAdapter(MainActivity.adapter);
+
+            if (!MainActivity.currentFolder.equals("/")) {
+                MainActivity.adapter.fileDetails.addFirst(new AdapterDetailedList.FileDetail
+                        ("..", activity
+                                .getString(R
+                                        .string
+                                        .parent_dir)
+                                , ""));
+            } else {
+                MainActivity.adapter.fileDetails.addFirst(new AdapterDetailedList
+                        .FileDetail(activity.getString(R.string.home), activity
+                        .getString(R.string.folder), ""));
+            }
+
         }
         if (exceptionMessage != null) {
             Toast.makeText(activity, exceptionMessage, Toast.LENGTH_SHORT).show();
