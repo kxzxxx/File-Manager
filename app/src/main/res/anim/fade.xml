@@ -7,6 +7,6 @@
     android:fromAlpha="0.5"
     android:toAlpha="1.0" />
 <translate
-    android:fromYDelta="1.0%p"
+    android:fromYDelta="2.0%p"
     android:toYDelta="0.0" />
 </set>

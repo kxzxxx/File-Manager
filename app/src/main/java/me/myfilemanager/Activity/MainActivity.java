@@ -41,7 +41,7 @@ import me.myfilemanager.Utils.UpdateList;
 // TODO: 2015/12/6 file handler
 
 public class MainActivity extends AppCompatActivity implements NavigationDrawerCallbacks {
-    public String currentFolder;
+    public static String currentFolder;
     String TAG = MainActivity.class.getSimpleName();
     public ActionMode mActionMode;
     public boolean actionMode = false;
@@ -150,8 +150,12 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
 
             if (id == R.id.pastefile) {
                 //TODO:add a dialog , notify
-                Log.d(TAG, "paste file" + Integer.toString(pathSet.size()));
-                new MoveFile(MainActivity.this).execute(pathSet);
+
+                final String[] pathS =
+                pathSet.toArray(new String[pathSet.size()]);
+                Log.d(TAG, "paste " + Integer.toString(pathSet.size())+"files");
+
+                new MoveFile(MainActivity.this).execute(pathS);
 
 
                 adapter.notifyDataSetChanged();
@@ -210,6 +214,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
 
             getWindow().setStatusBarColor(getResources().getColor(R.color
                     .myactionModePrimaryDarkColor));
+
+            pathSet.clear();
             return false; // Return false if nothing is done
         }
 
@@ -223,28 +229,26 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                     MainActivity.this.startActivity(intent);
                     return true
                 }*/
+            //TODO
             switch (id) {
                 case R.id.cutfile:
                     Toast.makeText(getApplicationContext(), "cut file",
                             Toast.LENGTH_SHORT).show();
-                    adapter.getCheckedItemPositions();
                     for (int i :
                             adapter.getCheckedItemPositions()) {
                         pathSet.add(adapter.fileDetails.get(i).getName());
-                        Log.d(TAG, "pathset" + pathSet.peekLast());
+                        Log.d(TAG, "pathset " + pathSet.peekLast());
                     }
                     sourceLocation = currentFolder;
-                    // TODO: 2016/3/21 file manager  put file path to a set
                     break;
                 case R.id
                         .copyfile:
                     Toast.makeText(getApplicationContext(), "copy file",
                             Toast.LENGTH_SHORT).show();
-                    // TODO: 2016/3/21 file manager  put file path to a set
                     for (int i :
                             adapter.getCheckedItemPositions()) {
                         pathSet.add(adapter.fileDetails.get(i).getName());
-                        Log.d(TAG, "pathset" + pathSet.peekLast());
+                        Log.d(TAG, "pathset " + pathSet.peekLast());
                     }
                     sourceLocation = currentFolder;
                     break;
@@ -276,7 +280,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     public void onNavigationDrawerItemSelected(int itemPosition) {
 
 
-        new UpdateList(this).execute(mNavigationDrawerFragment.adapter.getList().get
+        new UpdateList(this).execute(NavigationDrawerFragment.adapter.getList().get
                 (itemPosition).getText());
 
 
