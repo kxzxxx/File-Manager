@@ -204,17 +204,17 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
                 @Override
                 public void onClick(View v) {
                     if (getAdapterPosition() != 0)
-                        toggleChecked(getAdapterPosition()); //go actionmode
+                        toggleChecked(getLayoutPosition()); //go actionmode
                 }
             });
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 public boolean onLongClick(View v) {
 
                     if (getAdapterPosition() != 0) {
-                        if (!mSelectedItemsIds.get(getAdapterPosition(), false))
+                        if (!mSelectedItemsIds.get(getLayoutPosition(), false))
                             checkBox.setChecked(true);
                         else checkBox.setChecked(false);
-                        toggleChecked(getAdapterPosition());
+                        toggleChecked(getLayoutPosition());
                         return true;
 
                     }
@@ -229,7 +229,7 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
 
                 public void onClick(View v) {
                     if (!mainActivity.actionMode) {
-                        String name = fileDetails.get(getAdapterPosition()).getName();
+                    String name = fileDetails.get(getAdapterPosition()).getName();
                         if (getAdapterPosition() == 0) {
 
                             if (MainActivity.currentFolder.equals("/")) {

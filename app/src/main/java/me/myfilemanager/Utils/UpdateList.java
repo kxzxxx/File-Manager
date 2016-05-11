@@ -40,29 +40,29 @@ public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetail
      */
     @Override
     protected LinkedList<AdapterDetailedList.FileDetail> doInBackground(final String... params) {
-        try {
 
-            final String path = params[0];  //params[0]为传给UpdateList的第一个参数 此处为文件夹路径
 
-            if (TextUtils.isEmpty(path)) {
-                return null;
-            }
+        final String path = params[0];  //params[0]为传给UpdateList的第一个参数 此处为文件夹路径
 
-            File tempFolder = new File(path);
-            if (tempFolder.isFile()) {
-                tempFolder = tempFolder.getParentFile();
-            }
+        if (TextUtils.isEmpty(path)) {
+            return null;
+        }
 
-            String[] unopenableExtensions = {"apk", "mp3", "mp4", "png", "jpg", "jpeg"};
+        File tempFolder = new File(path);
+        if (tempFolder.isFile()) {
+            tempFolder = tempFolder.getParentFile();
+        }
 
-            final LinkedList<AdapterDetailedList.FileDetail> fileDetails = new LinkedList<>();
-            final LinkedList<AdapterDetailedList.FileDetail> folderDetails = new LinkedList<>();
-            MainActivity.currentFolder = tempFolder.getAbsolutePath();
+        String[] unopenableExtensions = {"apk", "mp3", "mp4", "png", "jpg", "jpeg"};
 
-            if (!tempFolder.canRead()) {
-                this.cancel(true);
+        final LinkedList<AdapterDetailedList.FileDetail> fileDetails = new LinkedList<>();
+        final LinkedList<AdapterDetailedList.FileDetail> folderDetails = new LinkedList<>();
+        MainActivity.currentFolder = tempFolder.getAbsolutePath();
 
-                // pop up a dialog
+        if (!tempFolder.canRead()) {
+            this.cancel(true);
+
+            // pop up a dialog
 
 
 
@@ -74,10 +74,10 @@ public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetail
                     if (stats != null) {
                         for (com.spazedog.lib.rootfw4.utils.File.FileStat stat : stats) {
                             *//**
-                 * @return
-                 *     The file type ('d'=>Directory, 'f'=>File, 'b'=>Block Device,
-                 *     'c'=>Character Device, 'l'=>Symbolic Link)
-                 *//*
+             * @return
+             *     The file type ('d'=>Directory, 'f'=>File, 'b'=>Block Device,
+             *     'c'=>Character Device, 'l'=>Symbolic Link)
+             *//*
                             if (stat.type().equals("d")) {
                                 folderDetails.add(new AdapterDetailedList.FileDetail(stat.name(),
                                         activity.getString(R.string.folder),
@@ -96,12 +96,25 @@ public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetail
                         }
                     }
                 }*/
+        } else {
+
+            if (!MainActivity.currentFolder.equals("/")) {
+                folderDetails.addFirst(new AdapterDetailedList.FileDetail
+                        ("..", activity
+                                .getString(R
+                                        .string
+                                        .parent_dir)
+                                , ""));
             } else {
-                File[] files = tempFolder.listFiles();// load file list
+                folderDetails.addFirst(new AdapterDetailedList
+                        .FileDetail(activity.getString(R.string.home), activity
+                        .getString(R.string.folder), ""));
+            }
 
+            File[] files = tempFolder.listFiles();// load file list
+
+            if (files != null) {
                 Arrays.sort(files, getFileNameComparator());
-
-
                 for (final File f : files) {
                     if (f.isDirectory()) {
                         folderDetails.add(new AdapterDetailedList.FileDetail(f.getName(),
@@ -121,14 +134,11 @@ public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetail
 
             }
 
+
             folderDetails.addAll(fileDetails);
-
-
-            return folderDetails;
-        } catch (Exception e) {
-            exceptionMessage = e.getMessage();
-            return null;
         }
+        return folderDetails;
+
     }
 
     /**
@@ -136,29 +146,17 @@ public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetail
      */
     @Override
     protected void onPostExecute(final LinkedList<AdapterDetailedList.FileDetail> names) {
-        super.onPostExecute(names);
+        int oldDataSetSize = MainActivity.adapter.fileDetails.size();
         if (names != null) {
+            MainActivity.adapter.fileDetails.clear();
+            MainActivity.adapter.notifyItemRangeRemoved(0, oldDataSetSize);
+            MainActivity.adapter.fileDetails.addAll(names);
 
-            MainActivity.adapter = new AdapterDetailedList(activity, names);
-            activity.recyclerView.setAdapter(MainActivity.adapter);
+            MainActivity.adapter.notifyItemRangeChanged(0, names.size());
 
-            if (!MainActivity.currentFolder.equals("/")) {
-                MainActivity.adapter.fileDetails.addFirst(new AdapterDetailedList.FileDetail
-                        ("..", activity
-                                .getString(R
-                                        .string
-                                        .parent_dir)
-                                , ""));
-            } else {
-                MainActivity.adapter.fileDetails.addFirst(new AdapterDetailedList
-                        .FileDetail(activity.getString(R.string.home), activity
-                        .getString(R.string.folder), ""));
-            }
 
         }
-        if (exceptionMessage != null) {
-            Toast.makeText(activity, exceptionMessage, Toast.LENGTH_SHORT).show();
-        }
+
         activity.invalidateOptionsMenu();
     }
 

@@ -10,8 +10,10 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ActionMode;
@@ -67,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
 
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what) {
+           /* switch (msg.what) {
                 case 111: {
 
 
@@ -85,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                     Toast.makeText(mTarget.get().getApplicationContext(), Integer.toString(msg
                                     .arg1),
                             Toast.LENGTH_SHORT).show();
-            }
+            }*/
         }
     }
 
@@ -103,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         //setup toolbar
         setSupportActionBar(ab);
         ab.setOnMenuItemClickListener(onMenuItemClick);
-        Log.d(TAG, "load====");
+        Log.d(TAG, "====load====");
 
         //setup drawer
 
@@ -127,6 +129,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
                         .sizeResId(R.dimen.divider)
                         .marginResId(R.dimen.leftmargin, R.dimen.rightmargin)
                         .build());
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        ((SimpleItemAnimator) recyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
 
         // recyclerView.setAdapter(mAdapter); //   new UpdateList(this).execute(currentFolder);
         //  recyclerView.setTextFilterEnabled(true); //获取主储存路径 //    String homePath =
