@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         //  recyclerView.setTextFilterEnabled(true); //获取主储存路径 //    String homePath =
         // Environment.getExternalStorageDirectory().getAbsolutePath(); //  File file = new File
         // (homePath);
-        
+
         this.onNavigationDrawerItemSelected(0);
     }
 

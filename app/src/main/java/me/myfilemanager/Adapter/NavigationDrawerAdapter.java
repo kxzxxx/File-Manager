@@ -12,9 +12,6 @@ import me.myfilemanager.Callback.NavigationDrawerCallbacks;
 import me.myfilemanager.Utils.NavigationItem;
 import me.myfilemanager.R;
 
-/**
- * Created by vV on 2015/6/16.
- */
 public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDrawerAdapter.ViewHolder> {
 
     private List<NavigationItem> mData;

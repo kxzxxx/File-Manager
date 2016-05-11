@@ -46,7 +46,7 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
 
     public AdapterDetailedList(final MainActivity mainActivity,
                                final LinkedList<FileDetail> fileDetails
-                               )                        {
+    ) {
         this.fileDetails = fileDetails;
         this.mainActivity = mainActivity;
         this.orig = fileDetails;
@@ -54,24 +54,11 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
         mSelectedItemsIds = new SparseBooleanArray(); //save checkbox status
 
 
-
-
         anim = /*main.IS_LIST?R.anim.fade_in_top:*/R.anim.fade;
     }
 
-    @Override
-    public void onViewDetachedFromWindow(AdapterDetailedList.ViewHolder holder) {
-        super.onViewAttachedToWindow(holder);
-        holder.itemView.clearAnimation();
-    }
 
-    @Override
-    public boolean onFailedToRecycleView(AdapterDetailedList.ViewHolder holder) {
-        holder.itemView.clearAnimation();
-        return super.onFailedToRecycleView(holder);
-    }
-
-    void animate(AdapterDetailedList.ViewHolder holder, int position,int offset) {
+    void animate(AdapterDetailedList.ViewHolder holder, int position, int offset) {
         if (position > lastPosition) {
             holder.itemView.clearAnimation();
             localAnimation = AnimationUtils.loadAnimation(context, anim);
@@ -104,78 +91,12 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
         viewHolder.dataLabel.setText(fileDetails.get(i).getDateModified());
 
         //setup checkboxlistener
-        if (i == 0) {
-            viewHolder.itemView.setOnLongClickListener(null);
-            viewHolder.hasOnLongClickListener = false;
-        } else {
-
-            viewHolder.checkBox.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    toggleChecked(i); //go actionmode
-                }
-            });
-
-            viewHolder.checkboxHasOnClickListener = true;
-
-            viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                public boolean onLongClick(View v) {
-
-                    if (!mSelectedItemsIds.get(i, false)) viewHolder.checkBox.setChecked(true);
-                    else viewHolder.checkBox.setChecked(false);
-                    toggleChecked(i);
-                    return true;
-                }
-
-            });
-
-            viewHolder.hasOnLongClickListener = true;
-        }
-
- animate(viewHolder, position,100);
 
 
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            //load file list
-            public void onClick(View v) {
-                if (!mainActivity.actionMode) {
-                    String name = fileDetails.get(i).getName();
-                    if (i == 0) {
+    //    animate(viewHolder, position, 100);
 
-                        if (MainActivity.currentFolder.equals("/")) {
-                            new UpdateList(mainActivity).execute(Environment
-                                    .getExternalStorageDirectory().getAbsolutePath());
-                        } else {
-                            File tempFile = new File(MainActivity.currentFolder);
-                            if (tempFile.isFile()) {
-                                tempFile = tempFile.getParentFile()
-                                        .getParentFile();
-                            } else {
-                                tempFile = tempFile.getParentFile();
-                            }
-                            new UpdateList(mainActivity).execute(tempFile.getAbsolutePath());
-                        }
 
-                    } else if
-                            (name.equals(mainActivity.getString(R.string.home))) {
-                        new UpdateList(mainActivity).execute(Environment
-                                .getExternalStorageDirectory().getAbsolutePath());
-                        return;
-                    }
 
-                    final File selectedFile = new File(MainActivity.currentFolder, name);
-
-                    if (selectedFile.isDirectory()) {
-                        new UpdateList(mainActivity).execute(selectedFile.getAbsolutePath());
-                    }
-                } else if (i != 0) {
-
-                    if (!mSelectedItemsIds.get(i, false)) viewHolder.checkBox.setChecked(true);
-                    else viewHolder.checkBox.setChecked(false);
-                    toggleChecked(i);
-                }
-            }
-
-        });
 
     }
 
@@ -277,11 +198,78 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
             sizeLabel = (TextView) itemView.findViewById(R.id.text2);
             dataLabel = (TextView) itemView.findViewById(R.id.text3);
             icon = (ImageView) itemView.findViewById(R.id.icon);
+            //setup on click
+            checkBox.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    if (getAdapterPosition() != 0)
+                        toggleChecked(getAdapterPosition()); //go actionmode
+                }
+            });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                public boolean onLongClick(View v) {
+
+                    if (getAdapterPosition() != 0) {
+                        if (!mSelectedItemsIds.get(getAdapterPosition(), false))
+                            checkBox.setChecked(true);
+                        else checkBox.setChecked(false);
+                        toggleChecked(getAdapterPosition());
+                        return true;
+
+                    }
+                    return false;
+                }
+
+            });
+
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                //load file list
+
+                public void onClick(View v) {
+                    if (!mainActivity.actionMode) {
+                        String name = fileDetails.get(getAdapterPosition()).getName();
+                        if (getAdapterPosition() == 0) {
+
+                            if (MainActivity.currentFolder.equals("/")) {
+                                new UpdateList(mainActivity).execute(Environment
+                                        .getExternalStorageDirectory().getAbsolutePath());
+                            } else {
+                                File tempFile = new File(MainActivity.currentFolder);
+                                if (tempFile.isFile()) {
+                                    tempFile = tempFile.getParentFile()
+                                            .getParentFile();
+                                } else {
+                                    tempFile = tempFile.getParentFile();
+                                }
+                                new UpdateList(mainActivity).execute(tempFile.getAbsolutePath());
+                            }
+
+                        } else if
+                                (name.equals(mainActivity.getString(R.string.home))) {
+                            new UpdateList(mainActivity).execute(Environment
+                                    .getExternalStorageDirectory().getAbsolutePath());
+
+                        }
+
+                        final File selectedFile = new File(MainActivity.currentFolder, name);
+
+                        if (selectedFile.isDirectory()) {
+                            new UpdateList(mainActivity).execute(selectedFile.getAbsolutePath());
+                        }
+                    } else if (getAdapterPosition() != 0) {
+
+                        if (!mSelectedItemsIds.get(getAdapterPosition(), false))
+                            checkBox.setChecked(true);
+                        else checkBox.setChecked(false);
+                        toggleChecked(getAdapterPosition());
+                    }
+                }
+
+            });
         }
-
-
     }
-
     public static class FileDetail {
         private final String name;
         private final String size;
