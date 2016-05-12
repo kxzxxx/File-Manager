@@ -11,7 +11,11 @@
     </style>
 
     <style name="myTheme" parent="AppTheme.Base">
-
+        <item name="android:navigationBarColor">@color/myPrimaryDarkColor</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="actionModeBackground">@color/myactionModePrimaryColor</item>
+        <item name="actionBarPopupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
 
 
@@ -21,15 +25,22 @@
     </style>
 
 
-    <style name="ToolBarStyle" parent="">
+    <style name="ToolBarStyle" >
 
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
         <item name="theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+        <item name="android:elevation">@dimen/toolbar_elevation</item>
     </style>
 
 
+    <style name="myDrawerTheme" parent="myTheme">
+        <item name="android:statusBarColor">@android:color/transparent</item>
 
+    </style>
 
+    <style name="Elevation">
+        <item name="android:elevation">100dp</item>
+    </style>
 </resources>
 
 

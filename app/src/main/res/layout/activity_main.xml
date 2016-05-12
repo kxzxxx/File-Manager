@@ -6,31 +6,46 @@
     android:fitsSystemWindows="true"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+        <View
+            android:id="@+id/revealBackground"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:background="@color/myPrimaryColor"
+          >
+        </View>
 
+        <View
+            android:id="@+id/reveal"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:background="@color/myPrimaryColor"
+         >
+        </View>
         <include
-            android:id="@+id/toolbar_actionbar"
+            android:id="@+id/appbar"
             layout="@layout/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
 
+
         <FrameLayout
+
+            android:layout_below="@id/appbar"
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <android.support.v7.widget.RecyclerView
-                android:cacheColorHint="@null"
                 android:id="@+id/list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:smoothScrollbar="true"
                 android:listSelector="?selectableItemBackground"
-                android:divider="@null"
                 android:scrollbars="vertical"
                 android:layout_marginLeft="@dimen/list_horizontal_margin"
                 android:layout_marginRight="@dimen/list_horizontal_margin"
@@ -40,7 +55,7 @@
         </FrameLayout>
 
 
-    </LinearLayout>
+    </RelativeLayout>
     <!-- android:layout_marginTop="?android:attr/actionBarSize"-->
     <me.myfilemanager.Fragment.ScrimInsetsFrameLayout
         style="@style/Elevation"

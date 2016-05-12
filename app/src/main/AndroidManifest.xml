@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     package="me.myfilemanager">
 
     <!-- To access Google+ APIs: -->
@@ -13,7 +14,7 @@
           android:allowBackup="true"
           android:icon="@mipmap/ic_launcher"
           android:label="@string/myapp_name"
-          android:theme="@style/myTheme">
+          app:theme="@style/myTheme">
           <activity
               android:theme="@style/myDrawerTheme"
               android:name="me.myfilemanager.Activity.MainActivity"
