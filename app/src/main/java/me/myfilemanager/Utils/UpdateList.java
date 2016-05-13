@@ -147,15 +147,16 @@ public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetail
     @Override
     protected void onPostExecute(final LinkedList<AdapterDetailedList.FileDetail> names) {
         int oldDataSetSize = MainActivity.adapter.fileDetails.size();
-        if (names != null) {
+       // if (names != null) {
             MainActivity.adapter.fileDetails.clear();
-            MainActivity.adapter.notifyItemRangeRemoved(0, oldDataSetSize);
+            MainActivity.adapter.notifyDataSetChanged();
+         //   MainActivity.adapter.notifyItemRangeRemoved(0, oldDataSetSize);
             MainActivity.adapter.fileDetails.addAll(names);
+MainActivity.adapter.notifyDataSetChanged();
+         //   MainActivity.adapter.notifyItemRangeChanged(0, names.size());
 
-            MainActivity.adapter.notifyItemRangeChanged(0, names.size());
 
-
-        }
+      //  }
 
         activity.invalidateOptionsMenu();
     }

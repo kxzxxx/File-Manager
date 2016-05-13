@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<me.myfilemanager.Custom.CustomDrawer xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/drawer"
-    android:layout_width="match_parent"
-    android:fitsSystemWindows="true"
-    android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
         <View
             android:id="@+id/revealBackground"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
-            android:background="@color/myPrimaryColor"
+            android:visibility="invisible"
           >
         </View>
 
@@ -23,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             android:background="@color/myPrimaryColor"
+            android:visibility="visible"
          >
         </View>
         <include
@@ -57,24 +54,3 @@
 
     </RelativeLayout>
     <!-- android:layout_marginTop="?android:attr/actionBarSize"-->
-    <me.myfilemanager.Fragment.ScrimInsetsFrameLayout
-        style="@style/Elevation"
-        android:id="@+id/scrimInsetsFrameLayout"
-        android:layout_width="@dimen/navigation_drawer_width"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
-        android:layout_gravity="end"
-        app:insetForeground="#4000"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
-
-        <fragment
-            android:id="@+id/fragment_drawer"
-            android:name="me.myfilemanager.Fragment.NavigationDrawerFragment"
-            android:layout_width="@dimen/navigation_drawer_width"
-            android:layout_height="match_parent"
-            android:layout_gravity="end" />
-    </me.myfilemanager.Fragment.ScrimInsetsFrameLayout>
-
-
-</me.myfilemanager.Custom.CustomDrawer>

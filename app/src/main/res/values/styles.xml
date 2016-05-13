@@ -8,13 +8,20 @@
         <item name="colorAccent">@color/myAccentColor</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+        <item name="android:windowFullscreen">true</item>
+
+
+        <item name="android:windowTranslucentStatus">true</item>
+
+
+        <item name="android:navigationBarColor">@color/myPrimaryDarkColor</item>
+        <!--<item name="actionModeBackground">@android:color/holo_red_light</item>-->
+        <item name="android:actionModeBackground">@android:color/transparent</item>
     </style>
 
     <style name="myTheme" parent="AppTheme.Base">
-        <item name="android:navigationBarColor">@color/myPrimaryDarkColor</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="actionModeBackground">@color/myactionModePrimaryColor</item>
         <item name="actionBarPopupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
 

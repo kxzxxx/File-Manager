@@ -46,14 +46,14 @@ import me.myfilemanager.Utils.UpdateList;
 //TODO save current folder
 // TODO: 2015/12/6 file handler
 
-public class MainActivity extends AppCompatActivity implements NavigationDrawerCallbacks {
+public class MainActivity extends AppCompatActivity /*implements NavigationDrawerCallbacks */{
     public static String currentFolder;
     public static AdapterDetailedList adapter;
     public ActionMode mActionMode;
     public boolean actionMode = false;
     public
     Toolbar ab;
-        NavigationDrawerFragment mNavigationDrawerFragment;
+    NavigationDrawerFragment mNavigationDrawerFragment;
     MainActivityHandler uiHandler = new MainActivityHandler(this);
     public String sourceLocation;
     public
@@ -66,12 +66,13 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
     LinkedList<String> pathSet = new LinkedList<>();
     public ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
+        CharSequence mTitle;
         // Called when the action mode is created; startActionMode() was called
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             // Inflate a menu resource providing context menu items
 
-             getMenuInflater().inflate(R.menu.filehandler, menu);
+            getMenuInflater().inflate(R.menu.filehandler, menu);
 
             return true;
         }
@@ -80,10 +81,10 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         // may be called multiple times if the mode is invalidated.
         @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-
-            //  getWindow().setStatusBarColor(getResources().getColor(R.color
-            //         .myactionModePrimaryDarkColor));
-            animateAppAndStatusBar(R.color.myPrimaryColor, R.color.myactionModePrimaryColor);
+            mTitle=ab.getTitle();
+            ab.setTitle(null);
+           animateAppAndStatusBar(R.color.myPrimaryColor, R.color.myactionModePrimaryColor,1);
+        //    getWindow().setStatusBarColor(getResources().getColor(android.R.color.white));
             pathSet.clear();
             return false; // Return false if nothing is done
         }
@@ -140,7 +141,9 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
 
 
             }
-            animateAppAndStatusBar(R.color.myactionModePrimaryColor, R.color.myPrimaryColor);
+           animateAppAndStatusBar(R.color.myactionModePrimaryColor, R.color.myPrimaryColor,0);
+           // getWindow().setStatusBarColor(getResources().getColor(android.R.color.white));
+            ab.setTitle(mTitle);
             actionMode = false;
             mActionMode = null;
         }
@@ -190,16 +193,15 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         //setup toolbar
         setSupportActionBar(ab);
         ab.setOnMenuItemClickListener(onMenuItemClick);
-        Log.d(TAG, "====load====");
 
         //setup drawer
 
-        mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager()
+      /*  mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager()
                 .findFragmentById(
                         R.id.fragment_drawer);
         mNavigationDrawerFragment.setup(R.id.fragment_drawer, (CustomDrawer) findViewById(R.id
                 .drawer
-        ), ab);
+        ), ab);*/
 
 
         adapter = new AdapterDetailedList(this, new LinkedList<AdapterDetailedList.FileDetail>());
@@ -222,7 +224,9 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         // Environment.getExternalStorageDirectory().getAbsolutePath(); //  File file = new File
         // (homePath);
 
-        this.onNavigationDrawerItemSelected(0);
+//        this.onNavigationDrawerItemSelected(0);
+        new UpdateList(this).execute("/sdcard/");
+        Log.d(TAG, "====load====");
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -258,35 +262,67 @@ public class MainActivity extends AppCompatActivity implements NavigationDrawerC
         NavigationDrawerFragment.readSharedSetting(this, "currentFolder", currentFolder);
     }
 
-    private void animateAppAndStatusBar(int fromColor, final int toColor) {
-        Animator animator = ViewAnimationUtils.createCircularReveal(
-                mRevealView,
-                ab.getWidth() / 2,
-                ab.getHeight() / 2, 0,
-                ab.getWidth() / 2);
-
-        animator.addListener(new AnimatorListenerAdapter() {
+    private void animateAppAndStatusBar(final int fromColor, final int toColor, final int ifSpread) {
+        mRevealBackgroundView.setVisibility(View.VISIBLE);
+        Animator animator;
+      if(ifSpread==1) {
+          animator = ViewAnimationUtils.createCircularReveal(
+                  mRevealView,
+                  ab.getWidth() / 2,
+                  ab.getHeight() / 2, 0,
+                  ab.getWidth() / 2); animator.addListener(new AnimatorListenerAdapter() {
 
             public void onAnimationStart(Animator animation) {
                 mRevealView.setBackgroundColor(getResources().getColor(toColor));
+                mRevealView.bringToFront();
+
+                mRevealBackgroundView.setBackgroundColor(getResources().getColor(fromColor));
             }
+              public void onAnimationEnd(Animator animation ){
+                mRevealView.bringToFront();
+                  mRevealBackgroundView.setVisibility(View.INVISIBLE);
+              }
         });
 
-        mRevealBackgroundView.setBackgroundColor(getResources().getColor(fromColor));
+      }else {
+          animator = ViewAnimationUtils.createCircularReveal(
+                  mRevealBackgroundView,
+                  ab.getWidth() / 2,
+                  ab.getHeight() / 2,
+                  ab.getWidth() / 2,0);
+       animator.addListener(new AnimatorListenerAdapter() {
+
+            public void onAnimationStart(Animator animation) {
+                mRevealBackgroundView.setBackgroundColor(getResources().getColor(fromColor));
+                mRevealBackgroundView.bringToFront();
+                mRevealView.setBackgroundColor(getResources().getColor(toColor));
+            }
+           public void onAnimationEnd(Animator animation){
+
+               mRevealView.bringToFront();
+
+               mRevealBackgroundView.setVisibility(View.INVISIBLE);
+
+           }
+        });
+
+      }
+
+
+
         animator.setStartDelay(200);
         animator.setDuration(125);
         animator.start();
-        mRevealView.setVisibility(View.VISIBLE);
     }
 
-    public void onNavigationDrawerItemSelected(int itemPosition) {
+  /*  public void onNavigationDrawerItemSelected(int itemPosition) {
 
 
         new UpdateList(this).execute(NavigationDrawerFragment.adapter.getList().get
                 (itemPosition).getText());
 
 
-    }
+    }*/
 
     static class MainActivityHandler extends Handler {
         final WeakReference<MainActivity> mTarget;
