@@ -54,5 +54,14 @@
     <color name="donation_normal">#b6cc45</color>
     <color name="donation_purchased">#DFED47</color>
 
-    <color name="indigo">#607d8b</color>
+    <color name="indigo50">#E8EAF6</color>
+    <color name="indigo100">#C5CAE9</color>
+    <color name="indigo200">#9FA8DA</color>
+    <color name="indigo300">#7986CB</color>
+    <color name="indigo400">#5C6BC0</color>
+    <color name="indigo500">#3F51B5</color>
+    <color name="indigo600">#3949AB</color>
+    <color name="indigo700">#303F9F</color>
+    <color name="indigo800">#283593</color>
+    <color name="indigo900">#1A237E</color>
 </resources>
