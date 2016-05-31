@@ -135,13 +135,13 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
 
     }
 
-    public void toggleChecked(final int postion) {
+    private void toggleChecked(final int position) {
 
-        if (mSelectedItemsIds.get(postion, false)) mSelectedItemsIds.put(postion, false);
-        else mSelectedItemsIds.put(postion, true);
+        if (mSelectedItemsIds.get(position, false)) mSelectedItemsIds.put(position, false);
+        else mSelectedItemsIds.put(position, true);
 
 
-        //start actionmode
+        //start actionMode
         if ((!mainActivity.actionMode || mainActivity.mActionMode == null)) {
             mainActivity.actionMode = true;
             mainActivity.mActionMode = mainActivity.ab.startActionMode(mainActivity
