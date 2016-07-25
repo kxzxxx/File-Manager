@@ -1,6 +1,7 @@
 package me.myfilemanager.Utils;
 
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -49,8 +50,14 @@ public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetail
         }
 
         File tempFolder = new File(path);
+        //TODO: checks permission
         if (tempFolder.isFile()) {
             tempFolder = tempFolder.getParentFile();
+        }
+
+        if (tempFolder == null) {
+            tempFolder = new File(Environment
+                    .getExternalStorageDirectory().getAbsolutePath());
         }
 
         String[] unopenableExtensions = {"apk", "mp3", "mp4", "png", "jpg", "jpeg"};
@@ -120,11 +127,9 @@ public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetail
                         folderDetails.add(new AdapterDetailedList.FileDetail(f.getName(),
                                 activity.getString(R.string.folder),
                                 ""));
-                    } else if (f.isFile()
-                            && !FilenameUtils.isExtension(f.getName().toLowerCase(),
-                            unopenableExtensions)
-                            && FileUtils.sizeOf(f) <= 20_000 * FileUtils.ONE_KB) {
+                    } else if (f.isFile()  ) {
                         final long fileSize = f.length();
+//                        todo local,folder date
                         SimpleDateFormat format = new SimpleDateFormat();
                         String date = format.format(f.lastModified());
                         fileDetails.add(new AdapterDetailedList.FileDetail(f.getName(),
