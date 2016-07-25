@@ -94,9 +94,7 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
         //setup checkboxlistener
 
 
-    //    animate(viewHolder, position, 100);
-
-
+        //    animate(viewHolder, position, 100);
 
 
     }
@@ -226,51 +224,66 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
 
 
             itemView.setOnClickListener(new View.OnClickListener() {
-                //load file list
+                                            //load file list
 
-                public void onClick(View v) {
-                    if (!mainActivity.actionMode) {
-                    String name = fileDetails.get(getAdapterPosition()).getName();
-                        if (getAdapterPosition() == 0) {
+                                            public void onClick(View v) {
+                                                //if not in seletcion mode
+                                                String name = fileDetails.get(getAdapterPosition()).getName();
+                                                Log.d("click:", name);
+                                                if (!mainActivity.actionMode) {
 
-                            if (MainActivity.currentFolder.equals("/")) {
-                                new UpdateList(mainActivity).execute(Environment
-                                        .getExternalStorageDirectory().getAbsolutePath());
-                            } else {
-                                File tempFile = new File(MainActivity.currentFolder);
-                                if (tempFile.isFile()) {
-                                    tempFile = tempFile.getParentFile()
-                                            .getParentFile();
-                                } else {
-                                    tempFile = tempFile.getParentFile();
-                                }
-                                new UpdateList(mainActivity).execute(tempFile.getAbsolutePath());
-                            }
 
-                        } else if
-                                (name.equals(mainActivity.getString(R.string.home))) {
-                            new UpdateList(mainActivity).execute(Environment
-                                    .getExternalStorageDirectory().getAbsolutePath());
+                                                    //if click first
+                                                    if (getAdapterPosition() == 0) {
 
-                        }
+                                                        if (MainActivity.currentFolder.equals("/") ||
+                                                                name.equals(mainActivity.getString(R.string.home))) {
+                                                            new UpdateList(mainActivity).execute(Environment
+                                                                    .getExternalStorageDirectory().getAbsolutePath());
+                                                        } else {
+                                                            File tempFile = new File(MainActivity.currentFolder);
+                                                            //may some permission issue
+                                                            tempFile = tempFile.getParentFile();
 
-                        final File selectedFile = new File(MainActivity.currentFolder, name);
+                                                            if (tempFile != null)
+                                                                new UpdateList(mainActivity).execute(tempFile.getAbsolutePath());
+                                                            else new UpdateList(mainActivity).execute(Environment
+                                                                    .getExternalStorageDirectory().getAbsolutePath());
+                                                        }
 
-                        if (selectedFile.isDirectory()) {
-                            new UpdateList(mainActivity).execute(selectedFile.getAbsolutePath());
-                        }
-                    } else if (getAdapterPosition() != 0) {
 
-                        if (!mSelectedItemsIds.get(getAdapterPosition(), false))
-                            checkBox.setChecked(true);
-                        else checkBox.setChecked(false);
-                        toggleChecked(getAdapterPosition());
-                    }
-                }
+                                                    }
+                                                    //if click not first
+                                                    else {
+                                                        final File selectedFile = new File(MainActivity.currentFolder, name);
 
-            });
+                                                        if (selectedFile.isDirectory()) {
+                                                            new UpdateList(mainActivity).execute(selectedFile.getAbsolutePath());
+                                                        }
+                                                    }
+                                                }
+//if in action mode
+
+                                                else {
+                                                    if (getAdapterPosition() == 0) {
+                                                        mSelectedItemsIds.put(0, false);
+                                                        return;
+                                                    }
+
+                                                    if (!mSelectedItemsIds.get(getAdapterPosition(), false))
+                                                        checkBox.setChecked(true);
+                                                    else checkBox.setChecked(false);
+                                                    toggleChecked(getAdapterPosition());
+                                                }
+                                            }
+
+                                        }
+
+
+            );
         }
     }
+
     public static class FileDetail {
         private final String name;
         private final String size;

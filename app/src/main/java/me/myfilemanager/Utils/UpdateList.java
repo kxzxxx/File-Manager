@@ -42,7 +42,7 @@ public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetail
     protected LinkedList<AdapterDetailedList.FileDetail> doInBackground(final String... params) {
 
 
-        final String path = params[0];  //params[0]为传给UpdateList的第一个参数 此处为文件夹路径
+        final String path = params[0];  //params[0] first parameter
 
         if (TextUtils.isEmpty(path)) {
             return null;
@@ -147,21 +147,32 @@ public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetail
     @Override
     protected void onPostExecute(final LinkedList<AdapterDetailedList.FileDetail> names) {
         int oldDataSetSize = MainActivity.adapter.fileDetails.size();
-       // if (names != null) {
-            MainActivity.adapter.fileDetails.clear();
-            MainActivity.adapter.notifyDataSetChanged();
-         //   MainActivity.adapter.notifyItemRangeRemoved(0, oldDataSetSize);
-            MainActivity.adapter.fileDetails.addAll(names);
-MainActivity.adapter.notifyDataSetChanged();
-         //   MainActivity.adapter.notifyItemRangeChanged(0, names.size());
+        // if (names != null) {
+        MainActivity.adapter.fileDetails.clear();
+        MainActivity.adapter.notifyDataSetChanged();
+        //   MainActivity.adapter.notifyItemRangeRemoved(0, oldDataSetSize);
+        MainActivity.adapter.fileDetails.addAll(names);
+        MainActivity.adapter.notifyDataSetChanged();
+        //   MainActivity.adapter.notifyItemRangeChanged(0, names.size());
 
 
-      //  }
+        //  }
 
         activity.invalidateOptionsMenu();
     }
 
-    public final Comparator<File> getFileNameComparator() {
-        return new AlphanumComparator();
+    private Comparator<File> getFileNameComparator() {
+
+        return new Comparator<File>() {
+
+
+            public int compare(File f1, File f2) {
+                String o1 = f1.getName();
+                String o2 = f2.getName();
+                return o1.compareToIgnoreCase(o2);
+            }
+        };
+
     }
+
 }
