@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity /*implements NavigationDrawe
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
             mTitle=ab.getTitle();
             ab.setTitle(null);
-           animateAppAndStatusBar(R.color.myPrimaryColor, R.color.myactionModePrimaryColor,1);
+       //    animateAppAndStatusBar(R.color.myPrimaryColor, R.color.myactionModePrimaryColor,1);
         //    getWindow().setStatusBarColor(getResources().getColor(android.R.color.white));
             pathSet.clear();
             return false; // Return false if nothing is done
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity /*implements NavigationDrawe
 
 
             }
-           animateAppAndStatusBar(R.color.myactionModePrimaryColor, R.color.myPrimaryColor,0);
+     //      animateAppAndStatusBar(R.color.myactionModePrimaryColor, R.color.myPrimaryColor,0);
            // getWindow().setStatusBarColor(getResources().getColor(android.R.color.white));
             ab.setTitle(mTitle);
             actionMode = false;
@@ -188,8 +188,8 @@ public class MainActivity extends AppCompatActivity /*implements NavigationDrawe
 
         ab = (Toolbar) findViewById(R.id.appbar);
         recyclerView = (RecyclerView) findViewById(R.id.list);
-        mRevealView = findViewById(R.id.reveal);
-        mRevealBackgroundView = findViewById(R.id.revealBackground);
+      //  mRevealView = findViewById(R.id.reveal);
+      //  mRevealBackgroundView = findViewById(R.id.revealBackground);
         //setup toolbar
         setSupportActionBar(ab);
         ab.setOnMenuItemClickListener(onMenuItemClick);
