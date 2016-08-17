@@ -103,14 +103,14 @@ public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetail
                         }
                     }
                 }*/
-        } else {
+        }
+        else
+        {
 
             if (!MainActivity.currentFolder.equals("/")) {
                 folderDetails.addFirst(new AdapterDetailedList.FileDetail
                         ("..", activity
-                                .getString(R
-                                        .string
-                                        .parent_dir)
+                                .getString(R  .string .parent_dir)
                                 , ""));
             } else {
                 folderDetails.addFirst(new AdapterDetailedList
@@ -127,7 +127,9 @@ public class UpdateList extends AsyncTask<String, Void, LinkedList<AdapterDetail
                         folderDetails.add(new AdapterDetailedList.FileDetail(f.getName(),
                                 activity.getString(R.string.folder),
                                 ""));
-                    } else if (f.isFile()  ) {
+                    }
+                    else if (f.isFile()  )
+                    {
                         final long fileSize = f.length();
 //                        todo local,folder date
                         SimpleDateFormat format = new SimpleDateFormat();

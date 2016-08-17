@@ -229,26 +229,37 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
                                             public void onClick(View v) {
                                                 //if not in seletcion mode
                                                 String name = fileDetails.get(getAdapterPosition()).getName();
-                                                Log.d("click:", name);
-                                                if (!mainActivity.actionMode) {
 
+                                                if (!mainActivity.actionMode) {
+                                                    Log.d("click:", name);
 
                                                     //if click first
                                                     if (getAdapterPosition() == 0) {
 
                                                         if (MainActivity.currentFolder.equals("/") ||
-                                                                name.equals(mainActivity.getString(R.string.home))) {
+                                                                name.equals(mainActivity.getString(R.string.home))
+                                                               ) {
+
+
                                                             new UpdateList(mainActivity).execute(Environment
                                                                     .getExternalStorageDirectory().getAbsolutePath());
-                                                        } else {
+                                                        }
+                                                        else {
                                                             File tempFile = new File(MainActivity.currentFolder);
                                                             //may some permission issue
                                                             tempFile = tempFile.getParentFile();
 
-                                                            if (tempFile != null)
+                                                            if (tempFile!=null&&tempFile.canRead())
+                                                            {
+                                                                Log.d("goto:", tempFile.getAbsolutePath());
                                                                 new UpdateList(mainActivity).execute(tempFile.getAbsolutePath());
-                                                            else new UpdateList(mainActivity).execute(Environment
-                                                                    .getExternalStorageDirectory().getAbsolutePath());
+
+                                                            }
+                                                            else
+                                                            { Log.d("goto:", tempFile+" can not read");
+                                                                new UpdateList(mainActivity).execute(Environment
+                                                                    .getExternalStorageDirectory().getAbsolutePath());}
+
                                                         }
 
 
@@ -256,9 +267,14 @@ public class AdapterDetailedList extends RecyclerView.Adapter<AdapterDetailedLis
                                                     //if click not first
                                                     else {
                                                         final File selectedFile = new File(MainActivity.currentFolder, name);
-
-                                                        if (selectedFile.isDirectory()) {
+// /st
+                                                        if (selectedFile.isDirectory()&&selectedFile.canRead()) {
                                                             new UpdateList(mainActivity).execute(selectedFile.getAbsolutePath());
+                                                            Log.d("goto:", selectedFile.getAbsolutePath());
+                                                        }else{
+                                                            Log.d("goto:", selectedFile+" can not read");
+                                                            new UpdateList(mainActivity).execute(Environment
+                                                                    .getExternalStorageDirectory().getAbsolutePath());
                                                         }
                                                     }
                                                 }

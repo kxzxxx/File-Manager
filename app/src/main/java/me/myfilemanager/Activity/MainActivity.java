@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity /*implements NavigationDrawe
         // Called when the user selects a contextual menu item
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            int id = item.getItemId();
+
             //noinspection SimplifiableIfStatement
              /*   if (id == R.id.action_settings) {
                     Intent intent = new Intent(MainActivity.this, SettingActivity.class);
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity /*implements NavigationDrawe
                     return true
                 }*/
             //TODO
-            switch (id) {
+            switch (item.getItemId()) {
                 case R.id.cutfile:
                     Toast.makeText(getApplicationContext(), "cut file",
                             Toast.LENGTH_SHORT).show();
@@ -125,6 +125,7 @@ public class MainActivity extends AppCompatActivity /*implements NavigationDrawe
 
             }
 
+            supportInvalidateOptionsMenu(); //reflash menu
             MainActivity.this.mActionMode.finish();
             return true;
 
@@ -152,27 +153,32 @@ public class MainActivity extends AppCompatActivity /*implements NavigationDrawe
     Toolbar.OnMenuItemClickListener onMenuItemClick = new Toolbar.OnMenuItemClickListener() {
 
         public boolean onMenuItemClick(MenuItem item) {
-            int id = item.getItemId();
-            //noinspection SimplifiableIfStatement
-            if (id == R.id.action_settings) {
-                Intent intent = new Intent(MainActivity.this, SettingActivity.class);
-                MainActivity.this.startActivity(intent);
-                return true;
-            }
-
-            if (id == R.id.pastefile) {
-                //TODO:add a dialog , notify
-
-                final String[] pathS =
-                        pathSet.toArray(new String[pathSet.size()]);
-                Log.d(TAG, "paste " + Integer.toString(pathSet.size()) + "files");
-
-                new MoveFile(MainActivity.this).execute(pathS);
 
 
-                adapter.notifyDataSetChanged();
 
-                return true;
+            switch (item.getItemId()) {
+                case R.id.action_settings: {
+                    Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+                    MainActivity.this.startActivity(intent);
+                    break;
+                }
+
+                case R.id.pastefile: {          //TODO:add a dialog , notify
+
+                    final String[] pathS =
+                            pathSet.toArray(new String[pathSet.size()]);
+                    Log.d(TAG, "paste " + Integer.toString(pathSet.size()) + "files");
+
+                    new MoveFile(MainActivity.this).execute(pathS);
+
+                    pathSet.clear();
+                    adapter.notifyDataSetChanged();
+
+                    break;
+                }
+
+                default:
+                    return true;
             }
 
             return true;
@@ -233,18 +239,26 @@ public class MainActivity extends AppCompatActivity /*implements NavigationDrawe
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return super.onCreateOptionsMenu(menu);
     }
+    public boolean onPrepareOptionsMenu(final Menu menu) {
+if(pathSet.size()==0)
+        {
+            menu.removeItem(R.id.pastefile);
+        }
 
+        return true;
+    }
     public void onBackPressed() {
         //exit action mode
-        if (mNavigationDrawerFragment.isDrawerOpen())
+     //   if (mNavigationDrawerFragment.isDrawerOpen())
             mNavigationDrawerFragment.closeDrawer();
+
       /* else if(this.mActionMode != null){
             this.actionMode = false;
             this.mActionMode.finish();
             this.mActionMode = null;
         }*/
 
-        else if (currentFolder.isEmpty() || currentFolder.equals("/")) {
+        if (currentFolder.isEmpty() || currentFolder.equals("/")) {
             Log.d(TAG, "finish");
             finish();
         } else {
