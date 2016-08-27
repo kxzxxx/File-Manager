@@ -177,8 +177,6 @@ public class MainActivity extends AppCompatActivity /*implements NavigationDrawe
                     break;
                 }
 
-                default:
-                    return true;
             }
 
             return true;
