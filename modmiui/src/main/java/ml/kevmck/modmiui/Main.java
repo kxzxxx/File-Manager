@@ -36,7 +36,7 @@ public class Main implements IXposedHookLoadPackage {
 
         findAndHookMethod("com.android.systemui.statusbar.BaseStatusBar",
                 lpparam.classLoader,
-                "addNotificationViews", IBinder.class, "android.service.notification.StatusBarNotification"
+                "addNotificationViews", IBinder.class, "com.android.systemui.statusbar.ExpandedNotification"
                 ,
                 new XC_MethodHook() {
 
