@@ -1,5 +1,9 @@
 package ml.kevmck.modmiui;
 
+import android.os.IBinder;
+
+import java.lang.reflect.Field;
+
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
@@ -21,8 +25,7 @@ public class Main implements IXposedHookLoadPackage {
                 new XC_MethodReplacement() {
                     @Override
                     protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
-                        //      XposedBridge.log("---------kev------replaceHookedMethod");
-                        obj_basebar = param.thisObject;
+
 
                         return null;
                     }
@@ -30,26 +33,39 @@ public class Main implements IXposedHookLoadPackage {
 
                 });
 
-        findAndHookMethod("com.android.systemui.statusbar.NotificationData",
+
+        findAndHookMethod("com.android.systemui.statusbar.BaseStatusBar",
                 lpparam.classLoader,
-                "add",
-                "com.android.systemui.statusbar.NotificationData$Entry",
+                "addNotificationViews", IBinder.class, "android.service.notification.StatusBarNotification"
+                ,
                 new XC_MethodHook() {
 
 
                     @Override
-                    protected void beforeHookedMethod(MethodHookParam param)
+                    protected void afterHookedMethod(MethodHookParam param)
                             throws Throwable {
 
-                        if (obj_basebar != null && param.args[0] != null) {
-                            XposedHelpers.callMethod(obj_basebar, "expandView", param.args[0], true);
-                            XposedHelpers.callMethod(param.args[0], "setUserExpanded", true);
-                        }
+                        if (param.thisObject == null) return;
+
+                        Object mNotificationData = XposedHelpers.getObjectField(param.thisObject, "mNotificationData");
+
+                        if (mNotificationData == null) return;
+
+                        Object Entry = XposedHelpers.callMethod(mNotificationData, "findByKey", param.args[0]);
+
+                        if (Entry == null) return;
+
+                        XposedHelpers.callMethod(Entry, "setUserExpanded", true);
+
+
+                        XposedHelpers.callMethod(param.thisObject, "expandView", Entry, true);
+
                     }
 
 
-                });
+
+    });
 
 
-    }
+}
 }
