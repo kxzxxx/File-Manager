@@ -13,7 +13,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 public class Main implements IXposedHookLoadPackage {
 
-
+  private   boolean b_expended=true;
     public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
         if (!lpparam.packageName.equals("com.android.systemui"))
             return;
@@ -24,7 +24,7 @@ public class Main implements IXposedHookLoadPackage {
                 new XC_MethodReplacement() {
                     @Override
                     protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
-                        if (param.thisObject == null) return null;
+
 
                         Object mNotificationData = XposedHelpers.getObjectField(param.thisObject, "mNotificationData");
 
@@ -48,7 +48,7 @@ public class Main implements IXposedHookLoadPackage {
                     protected void afterHookedMethod(MethodHookParam param)
                             throws Throwable {
 
-                        if (param.thisObject == null) return;
+
 
                         Object mNotificationData = XposedHelpers.getObjectField(param.thisObject, "mNotificationData");
 
@@ -72,7 +72,7 @@ public class Main implements IXposedHookLoadPackage {
                     protected void afterHookedMethod(MethodHookParam param)
                             throws Throwable {
 
-                        if (param.thisObject == null) return;
+
 
                         Object mNotificationData = XposedHelpers.getObjectField(param.thisObject, "mNotificationData");
 
@@ -98,7 +98,7 @@ public class Main implements IXposedHookLoadPackage {
                     protected void afterHookedMethod(MethodHookParam param)
                             throws Throwable {
 
-                        if (param.thisObject == null) return;
+
 
                         Object mNotificationData = XposedHelpers.getObjectField(param.thisObject, "mNotificationData");
 
@@ -123,16 +123,38 @@ public class Main implements IXposedHookLoadPackage {
                 "updateNotification", IBinder.class, "com.android.systemui.statusbar.ExpandedNotification"
                 ,
                 new XC_MethodHook() {
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
 
+
+                            Object mNotificationData = XposedHelpers.getObjectField(param.thisObject, "mNotificationData");
+
+                        if (mNotificationData != null) {
+                            Object Entry = XposedHelpers.callMethod(mNotificationData, "findByKey", param.args[0]);
+                            if (Entry != null) {
+                                b_expended = ((boolean) XposedHelpers.callMethod(Entry, "userExpanded"));
+
+
+
+
+
+                        }
+                        }
+                    }
                     @Override
                     protected void afterHookedMethod(MethodHookParam param)
                             throws Throwable {
 
-                        if (param.thisObject == null) return;
+
 
                         Object mNotificationData = XposedHelpers.getObjectField(param.thisObject, "mNotificationData");
 
                         if (mNotificationData == null) return;
+
+                        Object Entry = XposedHelpers.callMethod(mNotificationData, "findByKey", param.args[0]);
+
+                        if (Entry == null) return;
+
+                        if(!b_expended)XposedHelpers.callMethod(Entry, "setUserExpanded", true);
 
                         updateExpansionStates(param.thisObject, mNotificationData);
                     }
@@ -150,11 +172,11 @@ public class Main implements IXposedHookLoadPackage {
             //  NotificationData.Entry entry = mNotificationData.get(i);
             //if (!entry.userLocked()) {
 
-            //         if ((boolean) XposedHelpers.callMethod(entry, "userExpanded")) {//  if (!entry.userExpanded()) {
+                    if ((boolean) XposedHelpers.callMethod(entry, "userExpanded")) {//  if (!entry.userExpanded()) {
             XposedHelpers.callMethod(obj_basebar, "expandView", entry, true); //      expandView(entry, false);
 
 
-        }
+        }}
 
     }
 }
