@@ -1,6 +1,7 @@
 package ml.kevmck.modmiui;
 
 import android.os.IBinder;
+import android.view.View;
 
 
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
@@ -18,6 +19,19 @@ public class Main implements IXposedHookLoadPackage {
         if (!lpparam.packageName.equals("com.android.systemui"))
             return;
 
+        findAndHookMethod("com.android.systemui.SystemUICompatibility",
+                lpparam.classLoader, "isMediaNotification", android.view.View.class,
+                new XC_MethodReplacement() {
+                    @Override
+                    protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
+
+
+               return  true;
+                    }
+
+
+                })
+        ;
 
         findAndHookMethod("com.android.systemui.statusbar.BaseStatusBar",
                 lpparam.classLoader, "resetNotificationPile",
