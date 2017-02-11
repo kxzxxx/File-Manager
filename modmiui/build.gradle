@@ -7,8 +7,8 @@ android {
         applicationId "ml.kevmck.modmiui"
         minSdkVersion 21
         targetSdkVersion 23
-        versionCode 4
-        versionName "1.3"
+        versionCode 6
+        versionName "1.4"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 

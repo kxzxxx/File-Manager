@@ -2,6 +2,7 @@ package ml.kevmck.modmiui;
 
 import android.os.IBinder;
 import android.view.View;
+import android.view.ViewGroup;
 
 
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
@@ -19,20 +20,22 @@ public class Main implements IXposedHookLoadPackage {
         if (!lpparam.packageName.equals("com.android.systemui"))
             return;
 
-        findAndHookMethod("com.android.systemui.SystemUICompatibility",
-                lpparam.classLoader, "isMediaNotification", android.view.View.class,
-                new XC_MethodReplacement() {
+        findAndHookMethod("com.android.systemui.statusbar.stack.StackScrollAlgorithm",
+                lpparam.classLoader, "updateFirstChildHeightWhileExpanding",android.view.ViewGroup.class,
+                new XC_MethodHook() {
                     @Override
-                    protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
+
+                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
 
 
-               return  true;
+                        View mFirstChildWhileExpanding = (View) XposedHelpers.getObjectField(param.thisObject, "mFirstChildWhileExpanding");
+                        ViewGroup.LayoutParams lp = mFirstChildWhileExpanding.getLayoutParams();
+                        lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                        mFirstChildWhileExpanding.setLayoutParams(lp);
                     }
-
 
                 })
         ;
-
         findAndHookMethod("com.android.systemui.statusbar.BaseStatusBar",
                 lpparam.classLoader, "resetNotificationPile",
                 new XC_MethodReplacement() {
