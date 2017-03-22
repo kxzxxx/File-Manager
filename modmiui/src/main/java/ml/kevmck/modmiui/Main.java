@@ -15,12 +15,13 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 public class Main implements IXposedHookLoadPackage {
 
-  private   boolean b_expended=true;
+    private boolean b_expended = true;
+
     public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
         if (!lpparam.packageName.equals("com.android.systemui"))
             return;
 
-        findAndHookMethod("com.android.systemui.statusbar.stack.StackScrollAlgorithm",
+   /*     findAndHookMethod("com.android.systemui.statusbar.stack.StackScrollAlgorithm",
                 lpparam.classLoader, "updateFirstChildHeightWhileExpanding",android.view.ViewGroup.class,
                 new XC_MethodHook() {
                     @Override
@@ -36,6 +37,9 @@ public class Main implements IXposedHookLoadPackage {
 
                 })
         ;
+
+        */
+
         findAndHookMethod("com.android.systemui.statusbar.BaseStatusBar",
                 lpparam.classLoader, "resetNotificationPile",
                 new XC_MethodReplacement() {
@@ -43,11 +47,11 @@ public class Main implements IXposedHookLoadPackage {
                     protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
 
 
-                        Object mNotificationData = XposedHelpers.getObjectField(param.thisObject, "mNotificationData");
+                        //       Object mNotificationData = XposedHelpers.getObjectField(param.thisObject, "mNotificationData");
 
-                        if (mNotificationData == null) return null;
+                        //        if (mNotificationData == null) return null;
 
-                        updateExpansionStates(param.thisObject, mNotificationData);
+                        //        updateExpansionStates(param.thisObject, mNotificationData);
                         return null;
                     }
 
@@ -66,7 +70,6 @@ public class Main implements IXposedHookLoadPackage {
                             throws Throwable {
 
 
-
                         Object mNotificationData = XposedHelpers.getObjectField(param.thisObject, "mNotificationData");
 
                         if (mNotificationData == null) return;
@@ -78,6 +81,8 @@ public class Main implements IXposedHookLoadPackage {
 
 
                 });
+
+        /*
         findAndHookMethod("com.android.systemui.statusbar.BaseStatusBar",
                 lpparam.classLoader,
                 "removeNotificationViews", IBinder.class
@@ -102,7 +107,7 @@ public class Main implements IXposedHookLoadPackage {
 
 
                 });
-
+*/
 
         findAndHookMethod("com.android.systemui.statusbar.BaseStatusBar",
                 lpparam.classLoader,
@@ -116,7 +121,6 @@ public class Main implements IXposedHookLoadPackage {
                             throws Throwable {
 
 
-
                         Object mNotificationData = XposedHelpers.getObjectField(param.thisObject, "mNotificationData");
 
                         if (mNotificationData == null) return;
@@ -127,7 +131,7 @@ public class Main implements IXposedHookLoadPackage {
 
                         XposedHelpers.callMethod(Entry, "setUserExpanded", true);
 
-                        updateExpansionStates(param.thisObject, mNotificationData);
+                        //      updateExpansionStates(param.thisObject, mNotificationData);
 
 
                     }
@@ -143,7 +147,7 @@ public class Main implements IXposedHookLoadPackage {
                     protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
 
 
-                            Object mNotificationData = XposedHelpers.getObjectField(param.thisObject, "mNotificationData");
+                        Object mNotificationData = XposedHelpers.getObjectField(param.thisObject, "mNotificationData");
 
                         if (mNotificationData != null) {
                             Object Entry = XposedHelpers.callMethod(mNotificationData, "findByKey", param.args[0]);
@@ -151,16 +155,13 @@ public class Main implements IXposedHookLoadPackage {
                                 b_expended = ((boolean) XposedHelpers.callMethod(Entry, "userExpanded"));
 
 
-
-
-
-                        }
+                            }
                         }
                     }
+
                     @Override
                     protected void afterHookedMethod(MethodHookParam param)
                             throws Throwable {
-
 
 
                         Object mNotificationData = XposedHelpers.getObjectField(param.thisObject, "mNotificationData");
@@ -171,7 +172,7 @@ public class Main implements IXposedHookLoadPackage {
 
                         if (Entry == null) return;
 
-                        if(!b_expended)XposedHelpers.callMethod(Entry, "setUserExpanded", true);
+                        if (!b_expended) XposedHelpers.callMethod(Entry, "setUserExpanded", true);
 
                         updateExpansionStates(param.thisObject, mNotificationData);
                     }
@@ -189,11 +190,12 @@ public class Main implements IXposedHookLoadPackage {
             //  NotificationData.Entry entry = mNotificationData.get(i);
             //if (!entry.userLocked()) {
 
-                    if ((boolean) XposedHelpers.callMethod(entry, "userExpanded")) {//  if (!entry.userExpanded()) {
-            XposedHelpers.callMethod(obj_basebar, "expandView", entry, true); //      expandView(entry, false);
+            if ((boolean) XposedHelpers.callMethod(entry, "userExpanded")) {//  if (!entry.userExpanded()) {
+                XposedHelpers.callMethod(obj_basebar, "expandView", entry, true); //      expandView(entry, false);
 
 
-        }}
+            }
+        }
 
     }
 }
