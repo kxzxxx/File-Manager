@@ -75,6 +75,10 @@ typedef struct remote {
         struct sockaddr_storage addr;
         int addr_len;
     } direct_addr;
+
+    struct sockaddr_storage r_addr;
+    int r_addr_len;
+
 } remote_t;
 
 typedef struct server {

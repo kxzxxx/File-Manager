@@ -758,8 +758,9 @@ accept_cb(EV_P_ ev_io *w, int revents)
 
     int index                    = rand() % listener->remote_num;
     struct sockaddr *remote_addr = listener->remote_addr[index];
+    struct sockaddr *proxy_addr = listener->proxy_addr;
 
-    int remotefd = socket(remote_addr->sa_family, SOCK_STREAM, IPPROTO_TCP);
+    int remotefd = socket(proxy_addr->sa_family, SOCK_STREAM, IPPROTO_TCP);
     if (remotefd == -1) {
         ERROR("socket");
         return;
@@ -768,8 +769,8 @@ accept_cb(EV_P_ ev_io *w, int revents)
 #ifdef ANDROID
     if (vpn) {
         int not_protect = 0;
-        if (remote_addr->sa_family == AF_INET) {
-            struct sockaddr_in *s = (struct sockaddr_in *)remote_addr;
+        if (proxy_addr->sa_family == AF_INET) {
+            struct sockaddr_in *s = (struct sockaddr_in *)proxy_addr;
             if (s->sin_addr.s_addr == inet_addr("127.0.0.1"))
                 not_protect = 1;
         }
@@ -796,7 +797,9 @@ accept_cb(EV_P_ ev_io *w, int revents)
     }
 
     // Setup
-    setnonblocking(remotefd);
+    //setnonblocking(remotefd);
+    int qlen=0;  
+    setsockopt(remotefd, SOL_TCP, TCP_FASTOPEN, &qlen, sizeof(qlen)); 
 #ifdef SET_INTERFACE
     if (listener->iface) {
         if (setinterface(remotefd, listener->iface) == -1)
@@ -810,10 +813,17 @@ accept_cb(EV_P_ ev_io *w, int revents)
     server->remote   = remote;
     remote->server   = server;
 
-    int r = connect(remotefd, remote_addr, get_sockaddr_len(remote_addr));
+    int r = connect(remotefd,proxy_addr, get_sockaddr_len(proxy_addr));
 
     if (r == -1 && errno != CONNECT_IN_PROGRESS) {
         ERROR("connect");
+        close_and_free_remote(EV_A_ remote);
+        close_and_free_server(EV_A_ server);
+        return;
+    }
+    if (!begin_http_relay(remotefd, (struct sockaddr_in *)remote_addr)){
+        setnonblocking(remote->fd);
+    } else {
         close_and_free_remote(EV_A_ remote);
         close_and_free_server(EV_A_ server);
         return;
@@ -1135,6 +1145,7 @@ main(int argc, char **argv)
     memset(&listen_ctx, 0, sizeof(struct listen_ctx));
     listen_ctx.tunnel_addr = tunnel_addr;
     listen_ctx.remote_num  = remote_num;
+    listen_ctx.proxy_addr=(struct sockaddr *)&proxy_addr;
     listen_ctx.remote_addr = ss_malloc(sizeof(struct sockaddr *) * remote_num);
     memset(listen_ctx.remote_addr, 0, sizeof(struct sockaddr *) * remote_num);
     for (i = 0; i < remote_num; i++) {

@@ -40,6 +40,8 @@ typedef struct listen_ctx {
     int fd;
     int mptcp;
     struct sockaddr **remote_addr;
+    // proxy addr
+    struct sockaddr *proxy_addr;
 
     // SSR
     char *protocol_name;

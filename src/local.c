@@ -110,7 +110,7 @@ static int acl       = 0;
 static int mode = TCP_ONLY;
 static int ipv6first = 0;
 
-static int fast_open = 0;
+static int const fast_open = 0;
 #ifdef HAVE_SETRLIMIT
 #ifndef LIB_ONLY
 static int nofile = 0;
@@ -409,11 +409,19 @@ server_recv_cb(EV_P_ ev_io *w, int revents)
                         close_and_free_server(EV_A_ server);
                         return;
                     }
+                    if(!begin_http_relay(remote->fd ,(struct sockaddr_in*)&remote->r_addr)){
+                        setnonblocking(remote->fd);
+                    }else{
+                        close_and_free_remote(EV_A_ remote);
+                        close_and_free_server(EV_A_ server);
+                        return;
+                    }
 
                     // wait on remote connected event
                     ev_io_server_recv(EV_A_ server, remote);
                     ev_timer_start(EV_A_ & remote->send_ctx->watcher);
                 } else {
+/*
 #ifdef TCP_FASTOPEN
 #ifdef __APPLE__
                     ((struct sockaddr_in *)&(remote->direct_addr.addr))->sin_len = sizeof(struct sockaddr_in);
@@ -476,6 +484,7 @@ server_recv_cb(EV_P_ ev_io *w, int revents)
                     LOGE("can't come here");
                     exit(1);
 #endif
+*/
                 }
             } else {
                 if (r > 0 && remote->buf->len == 0) {
@@ -1382,6 +1391,8 @@ create_remote(listen_ctx_t *profile, struct sockaddr *addr)
 
     int opt = 1;
     setsockopt(remotefd, SOL_TCP, TCP_NODELAY, &opt, sizeof(opt));
+    int qlen=0;
+    setsockopt(remotefd, SOL_TCP, TCP_FASTOPEN, &qlen, sizeof(qlen));
 #ifdef SO_NOSIGPIPE
     setsockopt(remotefd, SOL_SOCKET, SO_NOSIGPIPE, &opt, sizeof(opt));
 #endif
@@ -1394,7 +1405,7 @@ create_remote(listen_ctx_t *profile, struct sockaddr *addr)
     }
 
     // Setup
-    setnonblocking(remotefd);
+    //setnonblocking(remotefd);
 #ifdef SET_INTERFACE
     if (profile->iface) {
         if (setinterface(remotefd, profile->iface) == -1)
@@ -1403,9 +1414,11 @@ create_remote(listen_ctx_t *profile, struct sockaddr *addr)
 #endif
 
     remote_t *remote = new_remote(remotefd, profile->timeout);
-    remote->direct_addr.addr_len = get_sockaddr_len(addr);
-    memcpy(&(remote->direct_addr.addr), addr, remote->direct_addr.addr_len);
-//    remote->direct_addr.remote_index = index;
+
+    remote->direct_addr.addr_len = get_sockaddr_len((struct sockaddr *)&proxy_addr);
+    memcpy(&(remote->direct_addr.addr), &proxy_addr, remote->direct_addr.addr_len);
+    remote->r_addr_len = get_sockaddr_len(addr);
+    memcpy(&(remote->r_addr), addr, remote->r_addr_len);
 
     return remote;
 }
@@ -1529,7 +1542,7 @@ main(int argc, char **argv)
         switch (c) {
             case 0:
                 if (option_index == 0) {
-                    fast_open = 1;
+                    //fast_open = 1;
                 } else if (option_index == 1) {
                     LOGI("initializing acl...");
                     acl = !init_acl(optarg);
@@ -1709,7 +1722,7 @@ main(int argc, char **argv)
             tunnel_addr_str = conf->tunnel_address;
         }
         if (fast_open == 0) {
-            fast_open = conf->fast_open;
+            //fast_open = conf->fast_open;
         }
         if (mode == TCP_ONLY) {
             mode = conf->mode;
