@@ -1,27 +1,41 @@
-package ml.kevmck.modmiui;
+package ml.kevmck.modmiui
 
-import android.os.IBinder;
-import android.view.View;
-import android.view.ViewGroup;
+import android.os.IBinder
+import android.os.PowerManager
+import android.telephony.TelephonyManager
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 
 
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
+import de.robv.android.xposed.XposedHelpers.findAndHookMethod
 
-import de.robv.android.xposed.IXposedHookLoadPackage;
-import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedHelpers;
-import de.robv.android.xposed.XC_MethodReplacement;
-import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
+import de.robv.android.xposed.IXposedHookLoadPackage
+import de.robv.android.xposed.XC_MethodHook
+import de.robv.android.xposed.XposedHelpers
+import de.robv.android.xposed.XC_MethodReplacement
+import de.robv.android.xposed.callbacks.XC_LoadPackage
 
-public class Main implements IXposedHookLoadPackage {
+class Main : IXposedHookLoadPackage {
 
-    private boolean b_expended = true;
+    private val b_expended = true
 
-    public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
-        if (!lpparam.packageName.equals("com.android.systemui"))
-            return;
 
-   /*     findAndHookMethod("com.android.systemui.statusbar.stack.StackScrollAlgorithm",
+    override fun handleLoadPackage(lpparam: XC_LoadPackage.LoadPackageParam) {
+
+        //   if (!lpparam.packageName.equals("com.android.systemui"))
+        //      return;
+
+        XposedHelpers.findAndHookMethod("android.view.Window", lpparam.classLoader,
+                "setAttributes", WindowManager.LayoutParams::class.java, object : XC_MethodHook() {
+
+            override fun beforeHookedMethod(param: XC_MethodHook.MethodHookParam?) {
+                val a = param!!.args[0] as WindowManager.LayoutParams
+                a.screenBrightness = -1.0f
+            }
+        })
+
+        /*     findAndHookMethod("com.android.systemui.statusbar.stack.StackScrollAlgorithm",
                 lpparam.classLoader, "updateFirstChildHeightWhileExpanding",android.view.ViewGroup.class,
                 new XC_MethodHook() {
                     @Override
@@ -38,21 +52,21 @@ public class Main implements IXposedHookLoadPackage {
                 })
         ;
 
-        */
+
 
         findAndHookMethod("com.android.systemui.statusbar.BaseStatusBar",
                 lpparam.classLoader, "resetNotificationPile",
-                new XC_MethodReplacement() {
+                new XC_MethodHook() {
                     @Override
-                    protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
+                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
 
 
-                        //       Object mNotificationData = XposedHelpers.getObjectField(param.thisObject, "mNotificationData");
+                               Object mNotificationData = XposedHelpers.getObjectField(param.thisObject, "mNotificationData");
 
-                        //        if (mNotificationData == null) return null;
+                                if (mNotificationData != null){
 
-                        //        updateExpansionStates(param.thisObject, mNotificationData);
-                        return null;
+                                updateExpansionStates(param.thisObject, mNotificationData);}
+
                     }
 
 
@@ -61,7 +75,6 @@ public class Main implements IXposedHookLoadPackage {
         findAndHookMethod("com.android.systemui.statusbar.phone.PhoneStatusBar",
                 lpparam.classLoader,
                 "updateExpandedViewPos", int.class,
-
                 new XC_MethodHook() {
 
 
@@ -72,17 +85,18 @@ public class Main implements IXposedHookLoadPackage {
 
                         Object mNotificationData = XposedHelpers.getObjectField(param.thisObject, "mNotificationData");
 
+
+
                         if (mNotificationData == null) return;
 
                         updateExpansionStates(param.thisObject, mNotificationData);
-
 
                     }
 
 
                 });
 
-        /*
+
         findAndHookMethod("com.android.systemui.statusbar.BaseStatusBar",
                 lpparam.classLoader,
                 "removeNotificationViews", IBinder.class
@@ -107,7 +121,7 @@ public class Main implements IXposedHookLoadPackage {
 
 
                 });
-*/
+
 
         findAndHookMethod("com.android.systemui.statusbar.BaseStatusBar",
                 lpparam.classLoader,
@@ -177,25 +191,28 @@ public class Main implements IXposedHookLoadPackage {
                         updateExpansionStates(param.thisObject, mNotificationData);
                     }
                 });
-    }
-
-    private void updateExpansionStates(Object obj_basebar, Object mNotificationData) {
-        //int N = mNotificationData.size();
-        int N = (int) XposedHelpers.callMethod(mNotificationData, "size");
+                */
 
 
-        for (int i = 0; i < N; i++) {
-
-            Object entry = XposedHelpers.callMethod(mNotificationData, "get", i);
-            //  NotificationData.Entry entry = mNotificationData.get(i);
-            //if (!entry.userLocked()) {
-
-            if ((boolean) XposedHelpers.callMethod(entry, "userExpanded")) {//  if (!entry.userExpanded()) {
-                XposedHelpers.callMethod(obj_basebar, "expandView", entry, true); //      expandView(entry, false);
+        /* private fun updateExpansionStates(obj_basebar: Any, mNotificationData: Any) {
+             //int N = mNotificationData.size();
+             val N = XposedHelpers.callMethod(mNotificationData, "size") as Int
 
 
-            }
-        }
+             for (i in 0 until N) {
+
+                 val entry = XposedHelpers.callMethod(mNotificationData, "get", i)
+                 //  NotificationData.Entry entry = mNotificationData.get(i);
+                 //if (!entry.userLocked()) {
+
+                 if (XposedHelpers.callMethod(entry, "userExpanded") as Boolean) {//  if (!entry.userExpanded()) {
+                     XposedHelpers.callMethod(obj_basebar, "expandView", entry, true) //      expandView(entry, false);
+
+
+                 }
+             }
+
+         } */
 
     }
 }
